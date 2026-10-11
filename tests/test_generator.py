@@ -68,7 +68,8 @@ def test_tasks_do_not_depend_on_pythons_hash_seed():
         "          sorted(task.rules.must.days), task.rules.must.earliest,\n"
         "          task.rules.must.latest,\n"
         "          task.rules.prefer and sorted(task.rules.prefer.days),\n"
-        "          [(p, task.calendar.busy(p)) for p in people])\n"
+        "          [(p, task.calendar.busy(p)) for p in people],\n"
+        "          task.request)\n"
     )
     src = str(Path(schedagent.__file__).parents[1])
     outputs = []

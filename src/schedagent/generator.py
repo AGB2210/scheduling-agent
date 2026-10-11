@@ -4,6 +4,7 @@ import random
 from dataclasses import dataclass
 
 from schedagent.calendar import Calendar
+from schedagent.request import write_request
 from schedagent.rules import MeetingRules, Window
 from schedagent.slots import DAYS, SLOTS_PER_DAY, Block
 
@@ -15,11 +16,12 @@ AFTERNOON = {"earliest": 8}  # 13:00 or later
 
 @dataclass(frozen=True)
 class Task:
-    """One scheduling problem: the calendars and the hidden rules."""
+    """One scheduling problem: the calendars, the hidden rules, and the request."""
 
     seed: int
     calendar: Calendar
     rules: MeetingRules
+    request: str
 
 
 def make_task(seed: int) -> Task:
@@ -27,7 +29,9 @@ def make_task(seed: int) -> Task:
     rng = random.Random(seed)
     team = rng.sample(NAMES, k=rng.randint(3, 5))
     calendar = Calendar({person: _busy_week(rng) for person in team})
-    return Task(seed=seed, calendar=calendar, rules=_make_rules(rng, team))
+    rules = _make_rules(rng, team)
+    request = write_request(rules, rng)
+    return Task(seed=seed, calendar=calendar, rules=rules, request=request)
 
 
 def _busy_week(rng: random.Random) -> list[Block]:
