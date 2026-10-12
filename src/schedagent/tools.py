@@ -39,8 +39,15 @@ class FindSlotsArgs(BaseModel, extra="forbid"):
     )
     days: list[str] | None = Field(
         default=None,
-        description="The days the meeting may be on, such as Monday. "
+        description="The only days the meeting may be on, such as Monday. "
         "Leave out to allow every day from Monday to Friday.",
+    )
+    # People usually say which days are out, not which are allowed. Without
+    # this, the model had to turn one list into the other and often got it wrong.
+    excluded_days: list[str] | None = Field(
+        default=None,
+        description="Days the meeting must not be on. "
+        "Use this when the request rules days out.",
     )
     earliest_start: str = Field(
         default="09:00", description="The meeting may not start before this time."
@@ -108,23 +115,7 @@ class Session:
     def _find_slots(self, args: FindSlotsArgs) -> str:
         """Hand the rules the model stated to the solver."""
         self._require_known(args.attendees)
-        length, remainder = divmod(args.duration_minutes, SLOT_MINUTES)
-        if remainder or not 1 <= length <= SLOTS_PER_DAY:
-            raise ToolError("duration_minutes must be a multiple of 30, from 30 to 480")
-        days = DAY_NAMES if args.days is None else args.days
-        if not days:
-            raise ToolError("days must name at least one day, or be left out")
-        earliest, latest = _parse_time(args.earliest_start), _parse_time(args.latest_end)
-        if latest <= earliest:
-            raise ToolError("latest_end must be after earliest_start")
-        rules = MeetingRules(
-            attendees=args.attendees,
-            length=length,
-            must=Window(
-                days={_parse_day(day) for day in days}, earliest=earliest, latest=latest
-            ),
-        )
-        blocks = valid_blocks(rules, self.calendar)
+        blocks = valid_blocks(rules_from_search(args), self.calendar)
         return json.dumps(
             {
                 "count": len(blocks),
@@ -158,6 +149,27 @@ class Session:
         unknown = [person for person in people if person not in self.calendar.people]
         if unknown:
             raise ToolError(f"unknown person: {', '.join(unknown)}")
+
+
+def rules_from_search(args: FindSlotsArgs) -> MeetingRules:
+    """Turn find_slots arguments into the rules the solver understands."""
+    length, remainder = divmod(args.duration_minutes, SLOT_MINUTES)
+    if remainder or not 1 <= length <= SLOTS_PER_DAY:
+        raise ToolError("duration_minutes must be a multiple of 30, from 30 to 480")
+    if args.days is not None and not args.days:
+        raise ToolError("days must name at least one day, or be left out")
+    allowed = {_parse_day(day) for day in (DAY_NAMES if args.days is None else args.days)}
+    allowed -= {_parse_day(day) for day in args.excluded_days or []}
+    if not allowed:
+        raise ToolError("days and excluded_days together leave no day to search")
+    earliest, latest = _parse_time(args.earliest_start), _parse_time(args.latest_end)
+    if latest <= earliest:
+        raise ToolError("latest_end must be after earliest_start")
+    return MeetingRules(
+        attendees=args.attendees,
+        length=length,
+        must=Window(days=allowed, earliest=earliest, latest=latest),
+    )
 
 
 def _parse_day(text: str) -> int:

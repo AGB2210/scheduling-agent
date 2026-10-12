@@ -24,13 +24,37 @@ You schedule one meeting for the people named in the request.
 The week runs Monday to Friday, 09:00 to 17:00. Meetings start and end on the \
 hour or half hour.
 Call find_slots to get the times when everyone is free. Give it every firm rule \
-in the request: who must attend, how long the meeting is, which days are \
-allowed, and any limit on the hours.
+in the request: who must attend, how long the meeting is, and any limit on the \
+days or the hours.
+If the request rules days out, list those days in excluded_days. If it names \
+the only days that work, list those days in days.
 Wishes such as "ideally" or "if possible" are not firm rules. To follow one, \
 first call find_slots with the wish included. If that finds nothing, call it \
 again without the wish.
 Then call book with one of the slots that find_slots returned. If find_slots \
 finds no slot for the firm rules, call give_up.
+
+Examples of turning a request into find_slots arguments:
+
+Request: Asha and Vikram need 30 minutes together. Thursday doesn't suit them. \
+They have to be done by 15:00.
+Arguments: {"attendees": ["Asha", "Vikram"], "duration_minutes": 30, \
+"excluded_days": ["Thursday"], "latest_end": "15:00"}
+
+Request: Get Leela, Imran and Sana together for 2 hours, on Tuesday or \
+Wednesday only. After 10:00 would be nice.
+Arguments, with the wish: {"attendees": ["Leela", "Imran", "Sana"], \
+"duration_minutes": 120, "days": ["Tuesday", "Wednesday"], \
+"earliest_start": "10:00"}
+Arguments, if that finds nothing: {"attendees": ["Leela", "Imran", "Sana"], \
+"duration_minutes": 120, "days": ["Tuesday", "Wednesday"]}
+
+Request: Vikram and Sana should meet for an hour, avoiding Monday and Friday. \
+Wednesday is their first choice.
+Arguments, with the wish: {"attendees": ["Vikram", "Sana"], \
+"duration_minutes": 60, "days": ["Wednesday"]}
+Arguments, if that finds nothing: {"attendees": ["Vikram", "Sana"], \
+"duration_minutes": 60, "excluded_days": ["Monday", "Friday"]}
 """
 
 NUDGE = "Reply by calling one of the tools."

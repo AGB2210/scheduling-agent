@@ -3,6 +3,9 @@
 from collections import Counter
 from statistics import mean, median
 
+from schedagent.generator import make_task
+from schedagent.translation import FIELDS, compare, last_search
+
 KINDS = ["correct", "bad_booking", "gave_up_wrongly", "no_answer"]
 
 
@@ -38,6 +41,38 @@ def summarise(records: list[dict]) -> dict:
 
 def _rule(problem: str) -> str:
     return "someone is busy" if problem.endswith(" is busy") else problem
+
+
+def summarise_searches(records: list[dict]) -> dict:
+    """For a run that used find_slots: how well each rule was stated.
+
+    Looks at the last search the tool accepted in each task and compares it
+    with that task's true rules.
+    """
+    counts = {field: Counter() for field in FIELDS}
+    tasks = 0
+    for record in records:
+        searched = last_search(record)
+        if searched is None:
+            continue
+        tasks += 1
+        true_rules = make_task(record["seed"]).rules
+        for field, verdict in compare(searched, true_rules).items():
+            counts[field][verdict] += 1
+    return {"tasks": tasks, "fields": {field: dict(counts[field]) for field in FIELDS}}
+
+
+def format_searches(summary: dict) -> str:
+    lines = [
+        f"How the last search stated each rule ({summary['tasks']} tasks with a search):",
+        f"  {'':10}{'exact':>7}{'narrower':>10}{'wrong':>7}",
+    ]
+    for field, counts in summary["fields"].items():
+        lines.append(
+            f"  {field:10}{counts.get('exact', 0):>7}"
+            f"{counts.get('narrower', 0):>10}{counts.get('wrong', 0):>7}"
+        )
+    return "\n".join(lines)
 
 
 def format_summary(header: dict, summary: dict) -> str:

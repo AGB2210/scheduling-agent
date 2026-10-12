@@ -4,7 +4,12 @@ import argparse
 from pathlib import Path
 
 from schedagent.local_model import local_model, model_options
-from schedagent.report import format_summary, summarise
+from schedagent.report import (
+    format_searches,
+    format_summary,
+    summarise,
+    summarise_searches,
+)
 from schedagent.runner import load_run, run_set
 from schedagent.server import running_ollama
 from schedagent.sets import practice_seeds
@@ -42,6 +47,10 @@ def main(argv: list[str] | None = None) -> None:
     else:
         header, records = load_run(args.run)
         print(format_summary(header, summarise(records)))
+        searches = summarise_searches(records)
+        if searches["tasks"]:
+            print()
+            print(format_searches(searches))
 
 
 def _pull(model: str) -> None:

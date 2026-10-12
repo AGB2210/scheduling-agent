@@ -61,6 +61,28 @@ def test_days_limit_the_search(session):
     }
 
 
+def test_excluded_days_are_left_out_of_the_search(session):
+    result = find(
+        session,
+        excluded_days=["Monday", "Wednesday", "thu", "Friday"],
+        duration_minutes=480,
+    )
+    assert result == {
+        "count": 1,
+        "slots": [{"day": "Tuesday", "start": "09:00", "end": "17:00"}],
+    }
+
+
+def test_days_and_excluded_days_can_be_used_together(session):
+    result = find(
+        session,
+        days=["Tuesday", "Wednesday"],
+        excluded_days=["Wednesday"],
+        duration_minutes=480,
+    )
+    assert [slot["day"] for slot in result["slots"]] == ["Tuesday"]
+
+
 def test_earliest_start_limits_the_search(session):
     result = find(session, days=["Monday"], earliest_start="16:00")
     assert result["slots"] == [{"day": "Monday", "start": "16:00", "end": "17:00"}]
@@ -76,6 +98,15 @@ def test_earliest_start_limits_the_search(session):
         ({"days": ["Saturday"]}, "'Saturday' is not a day from Monday to Friday"),
         ({"days": []}, "days must name at least one day"),
         ({"days": "Monday"}, "days: Input should be a valid list"),
+        ({"excluded_days": ["Sunday"]}, "'Sunday' is not a day from Monday to Friday"),
+        (
+            {"days": ["Monday"], "excluded_days": ["Monday"]},
+            "days and excluded_days together leave no day to search",
+        ),
+        (
+            {"excluded_days": ["Mon", "Tue", "Wed", "Thu", "Fri"]},
+            "days and excluded_days together leave no day to search",
+        ),
         ({"earliest_start": "13:15"}, "'13:15' is not a time between 09:00 and 17:00"),
         (
             {"earliest_start": "14:00", "latest_end": "12:00"},
@@ -98,6 +129,7 @@ def test_the_description_explains_each_argument():
         "attendees",
         "duration_minutes",
         "days",
+        "excluded_days",
         "earliest_start",
         "latest_end",
     }
