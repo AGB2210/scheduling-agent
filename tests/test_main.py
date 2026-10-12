@@ -6,6 +6,7 @@ import pytest
 import schedagent.__main__ as cli
 from schedagent.agent import Reply, ToolCall
 from schedagent.runner import load_run
+from schedagent.generator import make_task
 from schedagent.sets import practice_seeds
 from schedagent.versions import SOLVER
 
@@ -78,6 +79,44 @@ def test_run_can_use_the_solver_version(client, monkeypatch, tmp_path):
     )
     assert load_run(out)[0]["agent"] == "solver"
     assert given["tools"] is SOLVER.tools
+
+
+def test_worksheet_check_and_a_test_run_work_together(
+    client, monkeypatch, tmp_path, capsys
+):
+    worksheet = tmp_path / "data" / "worksheet.txt"
+    monkeypatch.setattr(cli, "WORKSHEET", worksheet)
+    monkeypatch.setattr(cli, "held_out_seeds", lambda: [5000, 5001])
+    monkeypatch.setattr(cli, "local_model", always_gives_up)
+
+    cli.main(["worksheet"])
+    assert "Task 2 of 2 (seed 5001)" in worksheet.read_text("utf-8")
+    with pytest.raises(FileExistsError):
+        cli.main(["worksheet"])
+
+    cli.main(["check"])
+    assert "Task 1: no request written yet" in capsys.readouterr().out
+    out = tmp_path / "run.jsonl"
+    with pytest.raises(ValueError, match="have not been written"):
+        cli.main(["run", "--model", "m", "--out", str(out), "--set", "test"])
+
+    lines = worksheet.read_text("utf-8").splitlines()
+    seeds = iter([5000, 5001])
+    written = []
+    for line in lines:
+        if line.startswith("Request:"):
+            people = " and ".join(sorted(make_task(next(seeds)).rules.attendees))
+            line += f" Please find a time for {people}."
+        written.append(line)
+    worksheet.write_text("\n".join(written) + "\n", encoding="utf-8")
+
+    cli.main(["check"])
+    assert "No problems found." in capsys.readouterr().out
+    cli.main(["run", "--model", "m", "--out", str(out), "--set", "test"])
+    header, records = load_run(out)
+    assert header["set"] == "test"
+    assert [record["seed"] for record in records] == [5000, 5001]
+    assert records[0]["request"].startswith("Please find a time for ")
 
 
 def test_a_command_is_required():

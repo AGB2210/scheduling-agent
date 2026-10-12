@@ -1,0 +1,812 @@
+# Test set worksheet
+#
+# For each task below, write the request a real person would send, after
+# "Request:". Use your own words, the way you would message a colleague.
+#
+# - Say everything listed: who, how long, and any limit on days or hours.
+# - "Firm" limits must be followed. Make them sound firm.
+# - A "wish" is optional. Make it sound like a preference, not a rule.
+# - Do not copy the wording of the facts. Vary how you say things.
+# - A request can run over more than one line.
+#
+# Lines that start with # are ignored.
+
+Task 1 of 100 (seed 5000)
+  Who: Divya, Rohan
+  Length: 90 minutes
+  Days (firm): not Wednesday
+  Hours (firm): any time
+  Wish (optional): end by 12:00
+Request: 
+
+Task 2 of 100 (seed 5001)
+  Who: Nisha, Tara
+  Length: 90 minutes
+  Days (firm): any day
+  Hours (firm): any time
+  Wish (optional): on Friday
+Request: 
+
+Task 3 of 100 (seed 5002)
+  Who: Kabir, Nisha, Ravi
+  Length: 1 hour
+  Days (firm): not Monday, not Friday
+  Hours (firm): any time
+  Wish (optional): none
+Request: 
+
+Task 4 of 100 (seed 5003)
+  Who: Arjun, Kabir, Rohan
+  Length: 90 minutes
+  Days (firm): only Tuesday, Thursday
+  Hours (firm): must end by 12:00
+  Wish (optional): none
+Request: 
+
+Task 5 of 100 (seed 5004)
+  Who: Arjun, Tara
+  Length: 2 hours
+  Days (firm): only Monday, Tuesday
+  Hours (firm): any time
+  Wish (optional): start at or after 13:00
+Request: 
+
+Task 6 of 100 (seed 5005)
+  Who: Divya, Ravi
+  Length: 90 minutes
+  Days (firm): only Tuesday, Wednesday
+  Hours (firm): any time
+  Wish (optional): on Wednesday
+Request: 
+
+Task 7 of 100 (seed 5006)
+  Who: Arjun, Nisha, Ravi
+  Length: 90 minutes
+  Days (firm): only Tuesday, Thursday
+  Hours (firm): cannot start before 13:00
+  Wish (optional): none
+Request: 
+
+Task 8 of 100 (seed 5007)
+  Who: Kabir, Nisha, Tara
+  Length: 30 minutes
+  Days (firm): not Tuesday, not Friday
+  Hours (firm): any time
+  Wish (optional): end by 12:00
+Request: 
+
+Task 9 of 100 (seed 5008)
+  Who: Arjun, Nisha
+  Length: 2 hours
+  Days (firm): only Monday, Tuesday
+  Hours (firm): must end by 12:00
+  Wish (optional): on Monday
+Request: 
+
+Task 10 of 100 (seed 5009)
+  Who: Arjun, Kabir, Tara
+  Length: 90 minutes
+  Days (firm): not Monday, not Friday
+  Hours (firm): any time
+  Wish (optional): none
+Request: 
+
+Task 11 of 100 (seed 5010)
+  Who: Kabir, Ravi
+  Length: 1 hour
+  Days (firm): only Wednesday, Friday
+  Hours (firm): cannot start before 13:00
+  Wish (optional): on Wednesday
+Request: 
+
+Task 12 of 100 (seed 5011)
+  Who: Meera, Nisha
+  Length: 2 hours
+  Days (firm): only Monday, Tuesday
+  Hours (firm): any time
+  Wish (optional): end by 12:00
+Request: 
+
+Task 13 of 100 (seed 5012)
+  Who: Arjun, Meera
+  Length: 30 minutes
+  Days (firm): any day
+  Hours (firm): must end by 12:00
+  Wish (optional): on Monday
+Request: 
+
+Task 14 of 100 (seed 5013)
+  Who: Kabir, Nisha, Tara
+  Length: 90 minutes
+  Days (firm): not Friday
+  Hours (firm): cannot start before 13:00
+  Wish (optional): none
+Request: 
+
+Task 15 of 100 (seed 5014)
+  Who: Nisha, Tara
+  Length: 30 minutes
+  Days (firm): only Monday, Friday
+  Hours (firm): any time
+  Wish (optional): start at or after 13:00
+Request: 
+
+Task 16 of 100 (seed 5015)
+  Who: Divya, Rohan
+  Length: 2 hours
+  Days (firm): only Monday, Friday
+  Hours (firm): cannot start before 13:00
+  Wish (optional): none
+Request: 
+
+Task 17 of 100 (seed 5016)
+  Who: Divya, Kabir
+  Length: 1 hour
+  Days (firm): any day
+  Hours (firm): any time
+  Wish (optional): start at or after 13:00
+Request: 
+
+Task 18 of 100 (seed 5017)
+  Who: Divya, Meera
+  Length: 90 minutes
+  Days (firm): not Friday
+  Hours (firm): any time
+  Wish (optional): start at or after 13:00
+Request: 
+
+Task 19 of 100 (seed 5018)
+  Who: Arjun, Divya, Kabir
+  Length: 30 minutes
+  Days (firm): only Monday, Tuesday
+  Hours (firm): any time
+  Wish (optional): end by 12:00
+Request: 
+
+Task 20 of 100 (seed 5019)
+  Who: Divya, Ravi
+  Length: 2 hours
+  Days (firm): only Monday, Wednesday
+  Hours (firm): any time
+  Wish (optional): none
+Request: 
+
+Task 21 of 100 (seed 5020)
+  Who: Nisha, Ravi, Tara
+  Length: 90 minutes
+  Days (firm): any day
+  Hours (firm): any time
+  Wish (optional): start at or after 13:00
+Request: 
+
+Task 22 of 100 (seed 5021)
+  Who: Nisha, Ravi, Rohan
+  Length: 1 hour
+  Days (firm): not Tuesday
+  Hours (firm): any time
+  Wish (optional): end by 12:00
+Request: 
+
+Task 23 of 100 (seed 5022)
+  Who: Arjun, Divya
+  Length: 90 minutes
+  Days (firm): not Monday, not Tuesday
+  Hours (firm): any time
+  Wish (optional): end by 12:00
+Request: 
+
+Task 24 of 100 (seed 5023)
+  Who: Arjun, Tara
+  Length: 1 hour
+  Days (firm): not Thursday
+  Hours (firm): any time
+  Wish (optional): end by 12:00
+Request: 
+
+Task 25 of 100 (seed 5024)
+  Who: Nisha, Ravi
+  Length: 2 hours
+  Days (firm): not Monday, not Thursday
+  Hours (firm): any time
+  Wish (optional): on Tuesday
+Request: 
+
+Task 26 of 100 (seed 5025)
+  Who: Divya, Ravi, Tara
+  Length: 30 minutes
+  Days (firm): only Monday, Wednesday
+  Hours (firm): any time
+  Wish (optional): on Wednesday
+Request: 
+
+Task 27 of 100 (seed 5026)
+  Who: Arjun, Kabir
+  Length: 1 hour
+  Days (firm): not Monday, not Wednesday
+  Hours (firm): any time
+  Wish (optional): none
+Request: 
+
+Task 28 of 100 (seed 5027)
+  Who: Arjun, Nisha, Ravi
+  Length: 2 hours
+  Days (firm): not Wednesday, not Friday
+  Hours (firm): cannot start before 13:00
+  Wish (optional): none
+Request: 
+
+Task 29 of 100 (seed 5028)
+  Who: Nisha, Ravi
+  Length: 2 hours
+  Days (firm): not Monday
+  Hours (firm): any time
+  Wish (optional): end by 12:00
+Request: 
+
+Task 30 of 100 (seed 5029)
+  Who: Arjun, Divya
+  Length: 30 minutes
+  Days (firm): not Wednesday
+  Hours (firm): cannot start before 13:00
+  Wish (optional): none
+Request: 
+
+Task 31 of 100 (seed 5030)
+  Who: Divya, Ravi, Rohan
+  Length: 30 minutes
+  Days (firm): any day
+  Hours (firm): cannot start before 13:00
+  Wish (optional): on Wednesday
+Request: 
+
+Task 32 of 100 (seed 5031)
+  Who: Divya, Nisha, Ravi
+  Length: 2 hours
+  Days (firm): not Wednesday, not Thursday
+  Hours (firm): any time
+  Wish (optional): on Tuesday
+Request: 
+
+Task 33 of 100 (seed 5032)
+  Who: Kabir, Nisha, Rohan
+  Length: 30 minutes
+  Days (firm): any day
+  Hours (firm): cannot start before 13:00
+  Wish (optional): none
+Request: 
+
+Task 34 of 100 (seed 5033)
+  Who: Arjun, Kabir
+  Length: 2 hours
+  Days (firm): not Monday, not Thursday
+  Hours (firm): any time
+  Wish (optional): on Friday
+Request: 
+
+Task 35 of 100 (seed 5034)
+  Who: Arjun, Ravi, Rohan
+  Length: 30 minutes
+  Days (firm): only Monday, Tuesday
+  Hours (firm): any time
+  Wish (optional): on Tuesday
+Request: 
+
+Task 36 of 100 (seed 5035)
+  Who: Divya, Ravi
+  Length: 90 minutes
+  Days (firm): not Monday, not Friday
+  Hours (firm): must end by 12:00
+  Wish (optional): on Tuesday
+Request: 
+
+Task 37 of 100 (seed 5036)
+  Who: Meera, Nisha, Ravi
+  Length: 2 hours
+  Days (firm): not Friday
+  Hours (firm): any time
+  Wish (optional): start at or after 13:00
+Request: 
+
+Task 38 of 100 (seed 5037)
+  Who: Arjun, Divya
+  Length: 90 minutes
+  Days (firm): not Tuesday, not Friday
+  Hours (firm): any time
+  Wish (optional): end by 12:00
+Request: 
+
+Task 39 of 100 (seed 5038)
+  Who: Divya, Meera, Rohan
+  Length: 90 minutes
+  Days (firm): not Wednesday, not Friday
+  Hours (firm): cannot start before 13:00
+  Wish (optional): on Tuesday
+Request: 
+
+Task 40 of 100 (seed 5039)
+  Who: Arjun, Ravi, Tara
+  Length: 30 minutes
+  Days (firm): any day
+  Hours (firm): any time
+  Wish (optional): end by 12:00
+Request: 
+
+Task 41 of 100 (seed 5040)
+  Who: Meera, Tara
+  Length: 2 hours
+  Days (firm): not Tuesday, not Thursday
+  Hours (firm): any time
+  Wish (optional): none
+Request: 
+
+Task 42 of 100 (seed 5041)
+  Who: Arjun, Kabir, Tara
+  Length: 90 minutes
+  Days (firm): any day
+  Hours (firm): must end by 12:00
+  Wish (optional): none
+Request: 
+
+Task 43 of 100 (seed 5042)
+  Who: Meera, Ravi
+  Length: 1 hour
+  Days (firm): any day
+  Hours (firm): any time
+  Wish (optional): end by 12:00
+Request: 
+
+Task 44 of 100 (seed 5043)
+  Who: Ravi, Tara
+  Length: 1 hour
+  Days (firm): not Monday, not Wednesday
+  Hours (firm): any time
+  Wish (optional): none
+Request: 
+
+Task 45 of 100 (seed 5044)
+  Who: Arjun, Meera
+  Length: 30 minutes
+  Days (firm): not Tuesday, not Wednesday
+  Hours (firm): any time
+  Wish (optional): none
+Request: 
+
+Task 46 of 100 (seed 5045)
+  Who: Meera, Ravi
+  Length: 2 hours
+  Days (firm): not Wednesday
+  Hours (firm): any time
+  Wish (optional): start at or after 13:00
+Request: 
+
+Task 47 of 100 (seed 5046)
+  Who: Divya, Meera, Tara
+  Length: 90 minutes
+  Days (firm): any day
+  Hours (firm): must end by 12:00
+  Wish (optional): on Thursday
+Request: 
+
+Task 48 of 100 (seed 5047)
+  Who: Divya, Kabir, Nisha
+  Length: 90 minutes
+  Days (firm): not Thursday
+  Hours (firm): any time
+  Wish (optional): start at or after 13:00
+Request: 
+
+Task 49 of 100 (seed 5048)
+  Who: Arjun, Ravi, Rohan
+  Length: 2 hours
+  Days (firm): not Friday
+  Hours (firm): cannot start before 13:00
+  Wish (optional): on Tuesday
+Request: 
+
+Task 50 of 100 (seed 5049)
+  Who: Divya, Kabir, Meera
+  Length: 30 minutes
+  Days (firm): only Monday, Wednesday
+  Hours (firm): any time
+  Wish (optional): on Monday
+Request: 
+
+Task 51 of 100 (seed 5050)
+  Who: Divya, Kabir, Meera
+  Length: 30 minutes
+  Days (firm): not Tuesday, not Wednesday
+  Hours (firm): any time
+  Wish (optional): on Monday
+Request: 
+
+Task 52 of 100 (seed 5051)
+  Who: Arjun, Meera, Nisha
+  Length: 90 minutes
+  Days (firm): only Monday, Friday
+  Hours (firm): must end by 12:00
+  Wish (optional): none
+Request: 
+
+Task 53 of 100 (seed 5052)
+  Who: Divya, Tara
+  Length: 90 minutes
+  Days (firm): only Thursday, Friday
+  Hours (firm): cannot start before 13:00
+  Wish (optional): on Thursday
+Request: 
+
+Task 54 of 100 (seed 5053)
+  Who: Ravi, Rohan
+  Length: 2 hours
+  Days (firm): only Tuesday, Thursday
+  Hours (firm): any time
+  Wish (optional): none
+Request: 
+
+Task 55 of 100 (seed 5054)
+  Who: Arjun, Nisha, Tara
+  Length: 90 minutes
+  Days (firm): any day
+  Hours (firm): any time
+  Wish (optional): on Wednesday
+Request: 
+
+Task 56 of 100 (seed 5055)
+  Who: Meera, Nisha, Rohan
+  Length: 1 hour
+  Days (firm): any day
+  Hours (firm): any time
+  Wish (optional): end by 12:00
+Request: 
+
+Task 57 of 100 (seed 5056)
+  Who: Kabir, Nisha, Rohan
+  Length: 2 hours
+  Days (firm): only Monday, Friday
+  Hours (firm): any time
+  Wish (optional): start at or after 13:00
+Request: 
+
+Task 58 of 100 (seed 5057)
+  Who: Kabir, Nisha, Ravi
+  Length: 30 minutes
+  Days (firm): not Wednesday, not Friday
+  Hours (firm): must end by 12:00
+  Wish (optional): on Tuesday
+Request: 
+
+Task 59 of 100 (seed 5058)
+  Who: Kabir, Meera
+  Length: 30 minutes
+  Days (firm): any day
+  Hours (firm): any time
+  Wish (optional): on Tuesday
+Request: 
+
+Task 60 of 100 (seed 5059)
+  Who: Kabir, Ravi
+  Length: 30 minutes
+  Days (firm): not Monday
+  Hours (firm): cannot start before 13:00
+  Wish (optional): none
+Request: 
+
+Task 61 of 100 (seed 5060)
+  Who: Arjun, Divya, Nisha
+  Length: 2 hours
+  Days (firm): not Friday
+  Hours (firm): any time
+  Wish (optional): on Wednesday
+Request: 
+
+Task 62 of 100 (seed 5061)
+  Who: Kabir, Nisha, Ravi
+  Length: 1 hour
+  Days (firm): any day
+  Hours (firm): any time
+  Wish (optional): start at or after 13:00
+Request: 
+
+Task 63 of 100 (seed 5062)
+  Who: Ravi, Rohan, Tara
+  Length: 30 minutes
+  Days (firm): not Tuesday
+  Hours (firm): must end by 12:00
+  Wish (optional): on Thursday
+Request: 
+
+Task 64 of 100 (seed 5063)
+  Who: Divya, Nisha
+  Length: 30 minutes
+  Days (firm): only Thursday, Friday
+  Hours (firm): cannot start before 13:00
+  Wish (optional): on Friday
+Request: 
+
+Task 65 of 100 (seed 5064)
+  Who: Arjun, Tara
+  Length: 2 hours
+  Days (firm): any day
+  Hours (firm): any time
+  Wish (optional): end by 12:00
+Request: 
+
+Task 66 of 100 (seed 5065)
+  Who: Arjun, Rohan
+  Length: 2 hours
+  Days (firm): any day
+  Hours (firm): any time
+  Wish (optional): start at or after 13:00
+Request: 
+
+Task 67 of 100 (seed 5066)
+  Who: Divya, Kabir, Meera
+  Length: 2 hours
+  Days (firm): not Tuesday, not Thursday
+  Hours (firm): any time
+  Wish (optional): on Wednesday
+Request: 
+
+Task 68 of 100 (seed 5067)
+  Who: Kabir, Nisha, Tara
+  Length: 2 hours
+  Days (firm): not Monday, not Friday
+  Hours (firm): cannot start before 13:00
+  Wish (optional): none
+Request: 
+
+Task 69 of 100 (seed 5068)
+  Who: Arjun, Rohan
+  Length: 30 minutes
+  Days (firm): any day
+  Hours (firm): any time
+  Wish (optional): on Friday
+Request: 
+
+Task 70 of 100 (seed 5069)
+  Who: Meera, Nisha, Rohan
+  Length: 90 minutes
+  Days (firm): not Monday, not Friday
+  Hours (firm): any time
+  Wish (optional): end by 12:00
+Request: 
+
+Task 71 of 100 (seed 5070)
+  Who: Divya, Kabir, Ravi
+  Length: 30 minutes
+  Days (firm): not Monday, not Thursday
+  Hours (firm): cannot start before 13:00
+  Wish (optional): none
+Request: 
+
+Task 72 of 100 (seed 5071)
+  Who: Divya, Tara
+  Length: 90 minutes
+  Days (firm): only Monday, Wednesday
+  Hours (firm): must end by 12:00
+  Wish (optional): on Wednesday
+Request: 
+
+Task 73 of 100 (seed 5072)
+  Who: Divya, Meera, Rohan
+  Length: 2 hours
+  Days (firm): only Tuesday, Friday
+  Hours (firm): cannot start before 13:00
+  Wish (optional): on Friday
+Request: 
+
+Task 74 of 100 (seed 5073)
+  Who: Divya, Tara
+  Length: 2 hours
+  Days (firm): any day
+  Hours (firm): any time
+  Wish (optional): start at or after 13:00
+Request: 
+
+Task 75 of 100 (seed 5074)
+  Who: Rohan, Tara
+  Length: 90 minutes
+  Days (firm): only Monday, Wednesday
+  Hours (firm): cannot start before 13:00
+  Wish (optional): on Wednesday
+Request: 
+
+Task 76 of 100 (seed 5075)
+  Who: Arjun, Meera
+  Length: 1 hour
+  Days (firm): not Monday, not Wednesday
+  Hours (firm): cannot start before 13:00
+  Wish (optional): none
+Request: 
+
+Task 77 of 100 (seed 5076)
+  Who: Nisha, Tara
+  Length: 2 hours
+  Days (firm): any day
+  Hours (firm): any time
+  Wish (optional): none
+Request: 
+
+Task 78 of 100 (seed 5077)
+  Who: Arjun, Divya
+  Length: 30 minutes
+  Days (firm): not Monday, not Tuesday
+  Hours (firm): must end by 12:00
+  Wish (optional): none
+Request: 
+
+Task 79 of 100 (seed 5078)
+  Who: Kabir, Nisha, Rohan
+  Length: 2 hours
+  Days (firm): not Tuesday
+  Hours (firm): any time
+  Wish (optional): start at or after 13:00
+Request: 
+
+Task 80 of 100 (seed 5079)
+  Who: Arjun, Ravi
+  Length: 90 minutes
+  Days (firm): not Tuesday, not Friday
+  Hours (firm): cannot start before 13:00
+  Wish (optional): on Wednesday
+Request: 
+
+Task 81 of 100 (seed 5080)
+  Who: Kabir, Tara
+  Length: 2 hours
+  Days (firm): not Tuesday, not Wednesday
+  Hours (firm): any time
+  Wish (optional): on Monday
+Request: 
+
+Task 82 of 100 (seed 5081)
+  Who: Arjun, Meera
+  Length: 1 hour
+  Days (firm): not Monday, not Thursday
+  Hours (firm): must end by 12:00
+  Wish (optional): none
+Request: 
+
+Task 83 of 100 (seed 5082)
+  Who: Kabir, Ravi
+  Length: 1 hour
+  Days (firm): not Friday
+  Hours (firm): any time
+  Wish (optional): on Monday
+Request: 
+
+Task 84 of 100 (seed 5150)
+  Who: Nisha, Ravi, Rohan
+  Length: 2 hours
+  Days (firm): only Monday, Tuesday
+  Hours (firm): must end by 12:00
+  Wish (optional): none
+Request: 
+
+Task 85 of 100 (seed 5186)
+  Who: Kabir, Nisha
+  Length: 90 minutes
+  Days (firm): not Monday, not Tuesday
+  Hours (firm): must end by 12:00
+  Wish (optional): on Thursday
+Request: 
+
+Task 86 of 100 (seed 5199)
+  Who: Meera, Rohan
+  Length: 2 hours
+  Days (firm): only Wednesday, Friday
+  Hours (firm): cannot start before 13:00
+  Wish (optional): none
+Request: 
+
+Task 87 of 100 (seed 5214)
+  Who: Arjun, Meera
+  Length: 1 hour
+  Days (firm): only Wednesday, Thursday
+  Hours (firm): must end by 12:00
+  Wish (optional): on Thursday
+Request: 
+
+Task 88 of 100 (seed 5318)
+  Who: Arjun, Kabir, Nisha
+  Length: 90 minutes
+  Days (firm): only Tuesday, Wednesday
+  Hours (firm): must end by 12:00
+  Wish (optional): none
+Request: 
+
+Task 89 of 100 (seed 5340)
+  Who: Kabir, Tara
+  Length: 90 minutes
+  Days (firm): only Monday, Tuesday
+  Hours (firm): must end by 12:00
+  Wish (optional): none
+Request: 
+
+Task 90 of 100 (seed 5359)
+  Who: Divya, Ravi
+  Length: 90 minutes
+  Days (firm): only Monday, Tuesday
+  Hours (firm): cannot start before 13:00
+  Wish (optional): on Monday
+Request: 
+
+Task 91 of 100 (seed 5410)
+  Who: Arjun, Rohan
+  Length: 2 hours
+  Days (firm): not Monday, not Friday
+  Hours (firm): must end by 12:00
+  Wish (optional): none
+Request: 
+
+Task 92 of 100 (seed 5423)
+  Who: Nisha, Tara
+  Length: 2 hours
+  Days (firm): not Wednesday
+  Hours (firm): must end by 12:00
+  Wish (optional): on Friday
+Request: 
+
+Task 93 of 100 (seed 5453)
+  Who: Arjun, Rohan, Tara
+  Length: 2 hours
+  Days (firm): only Tuesday, Friday
+  Hours (firm): any time
+  Wish (optional): none
+Request: 
+
+Task 94 of 100 (seed 5472)
+  Who: Arjun, Meera, Nisha
+  Length: 90 minutes
+  Days (firm): only Wednesday, Friday
+  Hours (firm): cannot start before 13:00
+  Wish (optional): on Friday
+Request: 
+
+Task 95 of 100 (seed 5494)
+  Who: Arjun, Kabir, Rohan
+  Length: 90 minutes
+  Days (firm): not Tuesday, not Wednesday
+  Hours (firm): cannot start before 13:00
+  Wish (optional): none
+Request: 
+
+Task 96 of 100 (seed 5573)
+  Who: Arjun, Ravi
+  Length: 2 hours
+  Days (firm): only Wednesday, Thursday
+  Hours (firm): any time
+  Wish (optional): end by 12:00
+Request: 
+
+Task 97 of 100 (seed 5579)
+  Who: Kabir, Rohan, Tara
+  Length: 2 hours
+  Days (firm): not Tuesday, not Friday
+  Hours (firm): must end by 12:00
+  Wish (optional): none
+Request: 
+
+Task 98 of 100 (seed 5583)
+  Who: Kabir, Meera, Ravi
+  Length: 90 minutes
+  Days (firm): only Monday, Thursday
+  Hours (firm): must end by 12:00
+  Wish (optional): on Thursday
+Request: 
+
+Task 99 of 100 (seed 5587)
+  Who: Arjun, Meera, Nisha
+  Length: 2 hours
+  Days (firm): only Tuesday, Friday
+  Hours (firm): must end by 12:00
+  Wish (optional): none
+Request: 
+
+Task 100 of 100 (seed 5588)
+  Who: Divya, Nisha, Rohan
+  Length: 2 hours
+  Days (firm): only Wednesday, Thursday
+  Hours (firm): cannot start before 13:00
+  Wish (optional): none
+Request: 

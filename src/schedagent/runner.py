@@ -6,7 +6,7 @@ from collections.abc import Callable, Iterable
 from pathlib import Path
 
 from schedagent.agent import LLM, run_agent
-from schedagent.generator import Task, make_task
+from schedagent.generator import Task
 from schedagent.grading import grade
 from schedagent.solver import preferred_blocks, valid_blocks
 from schedagent.tools import Session
@@ -45,7 +45,7 @@ def run_task(task: Task, llm: LLM, max_turns: int, version: Version = PLAIN) -> 
 
 
 def run_set(
-    seeds: Iterable[int],
+    tasks: Iterable[Task],
     llm: LLM,
     settings: dict,
     out: Path,
@@ -53,7 +53,7 @@ def run_set(
     on_task: Callable[[dict], None] = lambda record: None,
     version: Version = PLAIN,
 ) -> int:
-    """Run every seed not already in `out`. Returns how many tasks were run.
+    """Run every task not already in `out`. Returns how many tasks were run.
 
     The file starts with one header line describing the run: `settings` (the
     model's name and options), the agent version with its tools and system
@@ -78,10 +78,10 @@ def run_set(
         out.parent.mkdir(parents=True, exist_ok=True)
         _append(out, {"header": header})
     ran = 0
-    for seed in seeds:
-        if seed in done:
+    for task in tasks:
+        if task.seed in done:
             continue
-        record = run_task(make_task(seed), llm, max_turns, version)
+        record = run_task(task, llm, max_turns, version)
         _append(out, record)
         on_task(record)
         ran += 1

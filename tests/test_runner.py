@@ -13,6 +13,10 @@ from schedagent.versions import SOLVER
 SETTINGS = {"model": "fake-model", "options": {"seed": 0}}
 
 
+def tasks(*seeds):
+    return [make_task(seed) for seed in seeds]
+
+
 def give_up(messages):
     return Reply(calls=(ToolCall("give_up", {"reason": "no time works"}),))
 
@@ -54,7 +58,7 @@ def test_run_task_records_a_wrong_give_up():
 
 def test_run_set_saves_a_header_and_one_line_per_task(tmp_path):
     out = tmp_path / "runs" / "run.jsonl"
-    ran = run_set([0, 1, 2], give_up, SETTINGS, out, max_turns=5)
+    ran = run_set(tasks(0, 1, 2), give_up, SETTINGS, out, max_turns=5)
     header, records = load_run(out)
     assert ran == 3
     assert header == {
@@ -70,9 +74,9 @@ def test_run_set_saves_a_header_and_one_line_per_task(tmp_path):
 
 def test_run_set_continues_an_interrupted_run(tmp_path):
     out = tmp_path / "run.jsonl"
-    run_set([0, 1], give_up, SETTINGS, out)
+    run_set(tasks(0, 1), give_up, SETTINGS, out)
     seen = []
-    ran = run_set([0, 1, 2, 3], give_up, SETTINGS, out, on_task=seen.append)
+    ran = run_set(tasks(0, 1, 2, 3), give_up, SETTINGS, out, on_task=seen.append)
     assert ran == 2
     assert [record["seed"] for record in seen] == [2, 3]
     assert [record["seed"] for record in load_run(out)[1]] == [0, 1, 2, 3]
@@ -80,9 +84,9 @@ def test_run_set_continues_an_interrupted_run(tmp_path):
 
 def test_run_set_refuses_to_mix_two_different_runs_in_one_file(tmp_path):
     out = tmp_path / "run.jsonl"
-    run_set([0], give_up, SETTINGS, out)
+    run_set(tasks(0), give_up, SETTINGS, out)
     with pytest.raises(ValueError, match="different settings"):
-        run_set([1], give_up, {"model": "another-model"}, out)
+        run_set(tasks(1), give_up, {"model": "another-model"}, out)
 
 
 def test_the_solver_version_gets_its_own_tools_and_instructions(tmp_path):
@@ -96,7 +100,7 @@ def test_the_solver_version_gets_its_own_tools_and_instructions(tmp_path):
         return Reply(calls=(ToolCall("find_slots", args),))
 
     out = tmp_path / "run.jsonl"
-    run_set([0], searches_then_gives_up, SETTINGS, out, version=SOLVER)
+    run_set(tasks(0), searches_then_gives_up, SETTINGS, out, version=SOLVER)
     header, records = load_run(out)
     assert header["agent"] == "solver"
     assert header["tools"] == ["book", "find_slots", "give_up"]
@@ -109,6 +113,16 @@ def test_the_solver_version_gets_its_own_tools_and_instructions(tmp_path):
 
 def test_a_run_file_cannot_be_continued_with_another_agent_version(tmp_path):
     out = tmp_path / "run.jsonl"
-    run_set([0], give_up, SETTINGS, out)
+    run_set(tasks(0), give_up, SETTINGS, out)
     with pytest.raises(ValueError, match="different settings"):
-        run_set([1], give_up, SETTINGS, out, version=SOLVER)
+        run_set(tasks(1), give_up, SETTINGS, out, version=SOLVER)
+
+def test_a_task_keeps_its_own_request_text(tmp_path):
+    from dataclasses import replace
+
+    rewritten = replace(make_task(0), request="Sort out a time for us, please.")
+    out = tmp_path / "run.jsonl"
+    run_set([rewritten], give_up, SETTINGS, out)
+    record = load_run(out)[1][0]
+    assert record["request"] == "Sort out a time for us, please."
+    assert record["messages"][0]["content"] == "Sort out a time for us, please."

@@ -239,3 +239,15 @@ Task by task against run 05, 15 tasks got better and 6 got worse.
   impossible task every slot it returns is invalid.
 
 Run 07's setup was kept. The remaining weak point is impossible tasks.
+
+## Frozen for the test
+
+Tuning stopped after run 07. The instructions and tools of both agents are
+frozen as they are in commit `e9b23f7`, before any test request was written.
+The known weakness on impossible tasks was left as it is, because every change
+so far was fitted to the same 100 practice tasks.
+
+The test set is 100 new tasks (80 possible, 20 impossible) from seeds that were
+never used for practice. Their requests were written by the author, from a worksheet
+that lists each task's rules as plain facts. Each agent is run on the test set
+once, and that result is reported whatever it is.

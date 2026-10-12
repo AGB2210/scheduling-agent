@@ -67,4 +67,20 @@ start.bat -m schedagent report runs\practice.jsonl
 
 `run` saves one line per task, with every tool call the model made. If it is
 interrupted, running the same command again carries on where it stopped.
-`report` counts the outcomes.
+`report` counts the outcomes. Add `--agent solver` to `run` for the agent that
+hands the rules to the solver; the default is the plain agent.
+
+## The test set
+
+The test set is 100 further tasks whose requests were written by the author, so that
+the agent is measured on wording it was never tuned on. The rules of each task
+are listed as plain facts in `data\test\worksheet.txt`, with a space to write
+the request.
+
+```
+start.bat -m schedagent check
+start.bat -m schedagent run --set test --agent solver --model qwen2.5:3b --out runs\test-solver.jsonl
+```
+
+`check` lists requests that are missing or that name the wrong people. `run
+--set test` refuses to start until every request is written.
