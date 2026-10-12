@@ -7,8 +7,19 @@ from dataclasses import dataclass
 from pydantic import BaseModel, Field, ValidationError
 
 from schedagent.calendar import Calendar
-from schedagent.rules import Booking
-from schedagent.slots import DAY_NAMES, DAYS, Block, slot_to_time, time_to_slot
+from schedagent.rules import Booking, MeetingRules, Window
+from schedagent.slots import (
+    DAY_NAMES,
+    DAYS,
+    SLOT_MINUTES,
+    SLOTS_PER_DAY,
+    Block,
+    slot_to_time,
+    time_to_slot,
+)
+from schedagent.solver import valid_blocks
+
+MAX_SLOTS_SHOWN = 10
 
 
 class ToolError(Exception):
@@ -17,6 +28,26 @@ class ToolError(Exception):
 
 class GetBusyArgs(BaseModel, extra="forbid"):
     person: str
+
+
+class FindSlotsArgs(BaseModel, extra="forbid"):
+    attendees: list[str] = Field(
+        min_length=1, description="Everyone who must be at the meeting."
+    )
+    duration_minutes: int = Field(
+        description="How long the meeting lasts, in minutes: 30, 60, 90 and so on."
+    )
+    days: list[str] | None = Field(
+        default=None,
+        description="The days the meeting may be on, such as Monday. "
+        "Leave out to allow every day from Monday to Friday.",
+    )
+    earliest_start: str = Field(
+        default="09:00", description="The meeting may not start before this time."
+    )
+    latest_end: str = Field(
+        default="17:00", description="The meeting must be over by this time."
+    )
 
 
 class BookArgs(BaseModel, extra="forbid"):
@@ -33,8 +64,9 @@ class GiveUpArgs(BaseModel, extra="forbid"):
 class Session:
     """One task's calendars, plus whatever the agent ends up deciding."""
 
-    def __init__(self, calendar: Calendar):
+    def __init__(self, calendar: Calendar, tools: "dict[str, Tool] | None" = None):
         self.calendar = calendar
+        self.tools = PLAIN_TOOLS if tools is None else tools
         self.booking: Booking | None = None
         self.gave_up = False
 
@@ -46,9 +78,9 @@ class Session:
         """Run one tool call. A mistake comes back as an error message."""
         if self.finished:
             return "Error: this task is already finished."
-        if name not in TOOLS:
+        if name not in self.tools:
             return f"Error: there is no tool called {name!r}."
-        tool = TOOLS[name]
+        tool = self.tools[name]
         try:
             return tool.run(self, tool.args.model_validate(args))
         except ValidationError as error:
@@ -71,6 +103,40 @@ class Session:
                 }
                 for block in self.calendar.busy(args.person)
             ]
+        )
+
+    def _find_slots(self, args: FindSlotsArgs) -> str:
+        """Hand the rules the model stated to the solver."""
+        self._require_known(args.attendees)
+        length, remainder = divmod(args.duration_minutes, SLOT_MINUTES)
+        if remainder or not 1 <= length <= SLOTS_PER_DAY:
+            raise ToolError("duration_minutes must be a multiple of 30, from 30 to 480")
+        days = DAY_NAMES if args.days is None else args.days
+        if not days:
+            raise ToolError("days must name at least one day, or be left out")
+        earliest, latest = _parse_time(args.earliest_start), _parse_time(args.latest_end)
+        if latest <= earliest:
+            raise ToolError("latest_end must be after earliest_start")
+        rules = MeetingRules(
+            attendees=args.attendees,
+            length=length,
+            must=Window(
+                days={_parse_day(day) for day in days}, earliest=earliest, latest=latest
+            ),
+        )
+        blocks = valid_blocks(rules, self.calendar)
+        return json.dumps(
+            {
+                "count": len(blocks),
+                "slots": [
+                    {
+                        "day": DAY_NAMES[block.day],
+                        "start": slot_to_time(block.start),
+                        "end": slot_to_time(block.end),
+                    }
+                    for block in blocks[:MAX_SLOTS_SHOWN]
+                ],
+            }
         )
 
     def _book(self, args: BookArgs) -> str:
@@ -120,19 +186,28 @@ class Tool:
 # Every tool takes at least one argument. A tool with none (list_people, since
 # removed) led the model to invent arguments, and then to copy that mistake
 # into its later calls.
-TOOLS = {
-    "get_busy": Tool(
-        "Show when one person is busy this week.", GetBusyArgs, Session._get_busy
-    ),
-    "book": Tool(
-        "Book the meeting. Times look like 14:00 and fall on the hour or half "
-        "hour, between 09:00 and 17:00. This ends the task.",
-        BookArgs,
-        Session._book,
-    ),
-    "give_up": Tool(
-        "Say that no time works for this meeting. This ends the task.",
-        GiveUpArgs,
-        Session._give_up,
-    ),
-}
+GET_BUSY = Tool(
+    "Show when one person is busy this week.", GetBusyArgs, Session._get_busy
+)
+FIND_SLOTS = Tool(
+    "Find the times this week when every attendee is free for a meeting of the "
+    f"given length. Returns how many there are and the first {MAX_SLOTS_SHOWN}.",
+    FindSlotsArgs,
+    Session._find_slots,
+)
+BOOK = Tool(
+    "Book the meeting. Times look like 14:00 and fall on the hour or half "
+    "hour, between 09:00 and 17:00. This ends the task.",
+    BookArgs,
+    Session._book,
+)
+GIVE_UP = Tool(
+    "Say that no time works for this meeting. This ends the task.",
+    GiveUpArgs,
+    Session._give_up,
+)
+
+# The plain agent reads calendars and works out a time itself.
+PLAIN_TOOLS = {"get_busy": GET_BUSY, "book": BOOK, "give_up": GIVE_UP}
+# The solver agent states the rules and lets the solver find the times.
+SOLVER_TOOLS = {"find_slots": FIND_SLOTS, "book": BOOK, "give_up": GIVE_UP}

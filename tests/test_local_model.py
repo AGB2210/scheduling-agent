@@ -1,6 +1,7 @@
 from ollama import ChatResponse, Message, ResponseError
 
 from schedagent.agent import Reply, ToolCall
+from schedagent.tools import SOLVER_TOOLS
 from schedagent.local_model import (
     CONTEXT_TOKENS,
     MAX_REPLY_TOKENS,
@@ -36,6 +37,14 @@ def test_tool_schemas_describe_every_tool():
     book = schemas["book"]
     assert book["description"].startswith("Book the meeting.")
     assert set(book["parameters"]["required"]) == {"attendees", "day", "start", "end"}
+
+
+def test_the_model_is_told_about_the_tool_set_it_is_given():
+    names = [schema["function"]["name"] for schema in tool_schemas(SOLVER_TOOLS)]
+    assert names == ["find_slots", "book", "give_up"]
+    client = FakeClient(Message(role="assistant", content="ok"))
+    local_model(client, "some-model", tools=SOLVER_TOOLS)([{"role": "user", "content": "hi"}])
+    assert client.requests[0]["tools"] == tool_schemas(SOLVER_TOOLS)
 
 
 def test_a_tool_call_from_the_model_becomes_a_reply():

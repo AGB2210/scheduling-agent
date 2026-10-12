@@ -5,9 +5,10 @@ import pytest
 from schedagent.calendar import Calendar
 from schedagent.rules import Booking
 from schedagent.slots import Block
-from schedagent.tools import TOOLS, Session
+from schedagent.tools import PLAIN_TOOLS, SOLVER_TOOLS, Session
 
 MON, TUE = 0, 1
+ALL_TOOLS = {**PLAIN_TOOLS, **SOLVER_TOOLS}
 
 
 @pytest.fixture
@@ -125,12 +126,24 @@ def test_nothing_runs_after_the_task_is_finished(session):
     assert session.booking.block.day == TUE
 
 
+def test_the_two_tool_sets_differ_only_in_how_they_look_at_calendars():
+    assert set(PLAIN_TOOLS) == {"get_busy", "book", "give_up"}
+    assert set(SOLVER_TOOLS) == {"find_slots", "book", "give_up"}
+
+
 def test_every_tool_has_a_description():
-    assert set(TOOLS) == {"get_busy", "book", "give_up"}
-    assert all(tool.description for tool in TOOLS.values())
+    assert all(tool.description for tool in ALL_TOOLS.values())
 
 
 def test_every_tool_takes_at_least_one_argument():
     # A tool with no arguments made the model invent some. See tools.py.
-    for tool in TOOLS.values():
+    for tool in ALL_TOOLS.values():
         assert tool.args.model_json_schema().get("required")
+
+
+def test_a_session_only_offers_the_tools_it_was_given(session):
+    reply = session.call("find_slots", {"attendees": ["Ravi"], "duration_minutes": 30})
+    assert reply == "Error: there is no tool called 'find_slots'."
+    solver_session = Session(session.calendar, SOLVER_TOOLS)
+    reply = solver_session.call("get_busy", {"person": "Ravi"})
+    assert reply == "Error: there is no tool called 'get_busy'."

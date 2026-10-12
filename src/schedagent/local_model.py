@@ -3,7 +3,7 @@
 from ollama import Client, ResponseError
 
 from schedagent.agent import LLM, Reply, ToolCall
-from schedagent.tools import TOOLS
+from schedagent.tools import PLAIN_TOOLS, Tool
 
 CONTEXT_TOKENS = 8192
 MAX_REPLY_TOKENS = 512
@@ -22,8 +22,8 @@ def model_options(seed: int = 0) -> dict:
     }
 
 
-def tool_schemas() -> list[dict]:
-    """Describe every tool in the form the model is told about them."""
+def tool_schemas(tools: dict[str, Tool] = PLAIN_TOOLS) -> list[dict]:
+    """Describe a set of tools in the form the model is told about them."""
     return [
         {
             "type": "function",
@@ -33,11 +33,13 @@ def tool_schemas() -> list[dict]:
                 "parameters": tool.args.model_json_schema(),
             },
         }
-        for name, tool in TOOLS.items()
+        for name, tool in tools.items()
     ]
 
 
-def local_model(client: Client, model: str, seed: int = 0) -> LLM:
+def local_model(
+    client: Client, model: str, seed: int = 0, tools: dict[str, Tool] = PLAIN_TOOLS
+) -> LLM:
     """Wrap an Ollama model as the kind of function the agent loop calls."""
 
     def llm(messages: list[dict]) -> Reply:
@@ -45,7 +47,7 @@ def local_model(client: Client, model: str, seed: int = 0) -> LLM:
             response = client.chat(
                 model=model,
                 messages=[_to_ollama(message) for message in messages],
-                tools=tool_schemas(),
+                tools=tool_schemas(tools),
                 options=model_options(seed),
             )
         except ResponseError as error:
