@@ -55,6 +55,13 @@ Arguments, with the wish: {"attendees": ["Vikram", "Sana"], \
 "duration_minutes": 60, "days": ["Wednesday"]}
 Arguments, if that finds nothing: {"attendees": ["Vikram", "Sana"], \
 "duration_minutes": 60, "excluded_days": ["Monday", "Friday"]}
+
+Example of booking. If find_slots returns:
+{"count": 2, "slots": [{"day": "Tuesday", "start": "10:00", "end": "10:30"}, \
+{"day": "Thursday", "start": "14:30", "end": "15:00"}]}
+then book one of those slots, copying its day, start and end together:
+{"attendees": ["Asha", "Vikram"], "day": "Thursday", "start": "14:30", \
+"end": "15:00"}
 """
 
 NUDGE = "Reply by calling one of the tools."
