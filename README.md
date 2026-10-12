@@ -72,10 +72,10 @@ hands the rules to the solver; the default is the plain agent.
 
 ## The test set
 
-The test set is 100 further tasks whose requests were written by the author, so that
-the agent is measured on wording it was never tuned on. The rules of each task
-are listed as plain facts in `data\test\worksheet.txt`, with a space to write
-the request.
+The test set is 100 further tasks whose requests were written by the author, so
+that the agent is measured on wording it was never tuned on. Each task's rules
+are listed as plain facts in `data\test\worksheet.txt`, followed by the request
+written for it.
 
 ```
 start.bat -m schedagent check
@@ -84,3 +84,8 @@ start.bat -m schedagent run --set test --agent solver --model qwen2.5:3b --out r
 
 `check` lists requests that are missing or that name the wrong people. `run
 --set test` refuses to start until every request is written.
+
+## Licence
+
+The code is released under the MIT licence; see [LICENSE](LICENSE). The model
+is not part of this repository and has its own licence, noted above.
