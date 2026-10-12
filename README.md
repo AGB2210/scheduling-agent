@@ -29,3 +29,23 @@ the environment's Python, for example `start.bat -m pytest -q`.
 
 To rebuild the environment, delete the `.venv` folder and run `start.bat`
 again.
+
+## The local model
+
+The model runs through [Ollama](https://ollama.com). The project uses its own
+copy, kept in the `ollama` folder, and nothing is installed on the machine. That
+folder is not part of the repository.
+
+1. Download `ollama-windows-amd64.zip` from the
+   [Ollama releases page](https://github.com/ollama/ollama/releases) and unzip
+   it into `ollama\bin`, so that `ollama\bin\ollama.exe` exists. The project
+   was built with version 0.40.3.
+2. Download a model into `ollama\models`:
+
+   ```
+   start.bat -m schedagent pull qwen2.5:3b
+   ```
+
+The project starts this copy of Ollama when it needs the model and stops it
+afterwards. It listens on port 11435, not Ollama's usual port, so it does not
+get mixed up with any other copy on the machine.
