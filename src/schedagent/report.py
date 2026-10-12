@@ -41,7 +41,10 @@ def _rule(problem: str) -> str:
 
 
 def format_summary(header: dict, summary: dict) -> str:
-    lines = [f"Model: {header['model']}", ""]
+    lines = [f"Model: {header['model']}"]
+    if "agent" in header:
+        lines.append(f"Agent: {header['agent']} ({', '.join(header['tools'])})")
+    lines.append("")
     lines.append(f"{'':12}{'tasks':>6}{'correct':>9}")
     for name, count in summary["tasks"].items():
         correct = summary["grades"][name]["correct"]

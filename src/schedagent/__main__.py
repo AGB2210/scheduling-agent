@@ -8,7 +8,7 @@ from schedagent.report import format_summary, summarise
 from schedagent.runner import load_run, run_set
 from schedagent.server import running_ollama
 from schedagent.sets import practice_seeds
-from schedagent.tools import PLAIN_TOOLS
+from schedagent.versions import VERSIONS, Version
 
 
 def main(argv: list[str] | None = None) -> None:
@@ -24,6 +24,12 @@ def main(argv: list[str] | None = None) -> None:
     run.add_argument("--model", required=True)
     run.add_argument("--out", required=True, type=Path, help="file to save the run in")
     run.add_argument("--limit", type=int, help="only the first N practice tasks")
+    run.add_argument(
+        "--agent",
+        choices=sorted(VERSIONS),
+        default="plain",
+        help="plain reads calendars itself; solver hands the rules to find_slots",
+    )
 
     report = commands.add_parser("report", help="count what happened in a saved run")
     report.add_argument("run", type=Path)
@@ -32,7 +38,7 @@ def main(argv: list[str] | None = None) -> None:
     if args.command == "pull":
         _pull(args.model)
     elif args.command == "run":
-        _run(args.model, args.out, args.limit)
+        _run(args.model, args.out, args.limit, VERSIONS[args.agent])
     else:
         header, records = load_run(args.run)
         print(format_summary(header, summarise(records)))
@@ -46,7 +52,7 @@ def _pull(model: str) -> None:
             print(f"{entry.model}: {entry.size / 1e9:.2f} GB")
 
 
-def _run(model: str, out: Path, limit: int | None) -> None:
+def _run(model: str, out: Path, limit: int | None, version: Version) -> None:
     seeds = practice_seeds()[:limit]
 
     def show(record: dict) -> None:
@@ -56,13 +62,10 @@ def _run(model: str, out: Path, limit: int | None) -> None:
             flush=True,
         )
 
-    settings = {
-        "model": model,
-        "options": model_options(),
-        "tools": sorted(PLAIN_TOOLS),
-    }
+    settings = {"model": model, "options": model_options()}
     with running_ollama() as client:
-        ran = run_set(seeds, local_model(client, model), settings, out, on_task=show)
+        llm = local_model(client, model, tools=version.tools)
+        ran = run_set(seeds, llm, settings, out, on_task=show, version=version)
     print(f"Ran {ran} tasks. Saved in {out}")
 
 

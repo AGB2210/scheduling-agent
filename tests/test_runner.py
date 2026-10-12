@@ -2,11 +2,12 @@ import json
 
 import pytest
 
-from schedagent.agent import SYSTEM_PROMPT, Reply, ToolCall
+from schedagent.agent import SOLVER_PROMPT, SYSTEM_PROMPT, Reply, ToolCall
 from schedagent.generator import make_task
 from schedagent.runner import load_run, run_set, run_task
 from schedagent.slots import DAY_NAMES, slot_to_time
 from schedagent.solver import valid_blocks
+from schedagent.versions import SOLVER
 
 
 SETTINGS = {"model": "fake-model", "options": {"seed": 0}}
@@ -59,6 +60,8 @@ def test_run_set_saves_a_header_and_one_line_per_task(tmp_path):
     assert header == {
         "model": "fake-model",
         "options": {"seed": 0},
+        "agent": "plain",
+        "tools": ["book", "get_busy", "give_up"],
         "max_turns": 5,
         "system_prompt": SYSTEM_PROMPT,
     }
@@ -80,3 +83,32 @@ def test_run_set_refuses_to_mix_two_different_runs_in_one_file(tmp_path):
     run_set([0], give_up, SETTINGS, out)
     with pytest.raises(ValueError, match="different settings"):
         run_set([1], give_up, {"model": "another-model"}, out)
+
+
+def test_the_solver_version_gets_its_own_tools_and_instructions(tmp_path):
+    seen = []
+
+    def searches_then_gives_up(messages):
+        seen.append(messages[0]["content"])
+        if messages[-1]["role"] == "tool":
+            return give_up(messages)
+        args = {"attendees": sorted(make_task(0).rules.attendees), "duration_minutes": 30}
+        return Reply(calls=(ToolCall("find_slots", args),))
+
+    out = tmp_path / "run.jsonl"
+    run_set([0], searches_then_gives_up, SETTINGS, out, version=SOLVER)
+    header, records = load_run(out)
+    assert header["agent"] == "solver"
+    assert header["tools"] == ["book", "find_slots", "give_up"]
+    assert header["system_prompt"] == SOLVER_PROMPT
+    assert seen[0] == SOLVER_PROMPT
+    steps = records[0]["steps"]
+    assert steps[0]["tool"] == "find_slots"
+    assert not steps[0]["result"].startswith("Error:")
+
+
+def test_a_run_file_cannot_be_continued_with_another_agent_version(tmp_path):
+    out = tmp_path / "run.jsonl"
+    run_set([0], give_up, SETTINGS, out)
+    with pytest.raises(ValueError, match="different settings"):
+        run_set([1], give_up, SETTINGS, out, version=SOLVER)

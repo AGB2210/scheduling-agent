@@ -5,18 +5,21 @@ import time
 from collections.abc import Callable, Iterable
 from pathlib import Path
 
-from schedagent.agent import LLM, SYSTEM_PROMPT, run_agent
+from schedagent.agent import LLM, run_agent
 from schedagent.generator import Task, make_task
 from schedagent.grading import grade
 from schedagent.solver import preferred_blocks, valid_blocks
 from schedagent.tools import Session
+from schedagent.versions import PLAIN, Version
 
 
-def run_task(task: Task, llm: LLM, max_turns: int) -> dict:
+def run_task(task: Task, llm: LLM, max_turns: int, version: Version = PLAIN) -> dict:
     """Run one task and return a record of the run, ready to save."""
-    session = Session(task.calendar)
+    session = Session(task.calendar, version.tools)
     started = time.perf_counter()
-    trace = run_agent(task.request, session, llm, max_turns=max_turns)
+    trace = run_agent(
+        task.request, session, llm, max_turns, system_prompt=version.system_prompt
+    )
     seconds = time.perf_counter() - started
     result = grade(task, session)
     valid = valid_blocks(task.rules, task.calendar)
@@ -48,15 +51,23 @@ def run_set(
     out: Path,
     max_turns: int = 12,
     on_task: Callable[[dict], None] = lambda record: None,
+    version: Version = PLAIN,
 ) -> int:
     """Run every seed not already in `out`. Returns how many tasks were run.
 
     The file starts with one header line describing the run: `settings` (the
-    model's name and options), the turn limit and the system prompt. A run that
-    was interrupted can be continued by calling this again with the same file.
-    `on_task` is called with each new record, for showing progress.
+    model's name and options), the agent version with its tools and system
+    prompt, and the turn limit. A run that was interrupted can be continued by
+    calling this again with the same file. `on_task` is called with each new
+    record, for showing progress.
     """
-    header = {**settings, "max_turns": max_turns, "system_prompt": SYSTEM_PROMPT}
+    header = {
+        **settings,
+        "agent": version.name,
+        "tools": sorted(version.tools),
+        "max_turns": max_turns,
+        "system_prompt": version.system_prompt,
+    }
     done = set()
     if out.exists():
         saved_header, records = load_run(out)
@@ -70,7 +81,7 @@ def run_set(
     for seed in seeds:
         if seed in done:
             continue
-        record = run_task(make_task(seed), llm, max_turns)
+        record = run_task(make_task(seed), llm, max_turns, version)
         _append(out, record)
         on_task(record)
         ran += 1

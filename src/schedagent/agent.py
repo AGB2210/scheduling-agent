@@ -18,6 +18,21 @@ When you have found a time, call book once. If no time can follow the firm \
 rules, call give_up.
 """
 
+# For the agent that has find_slots in place of get_busy.
+SOLVER_PROMPT = """\
+You schedule one meeting for the people named in the request.
+The week runs Monday to Friday, 09:00 to 17:00. Meetings start and end on the \
+hour or half hour.
+Call find_slots to get the times when everyone is free. Give it every firm rule \
+in the request: who must attend, how long the meeting is, which days are \
+allowed, and any limit on the hours.
+Wishes such as "ideally" or "if possible" are not firm rules. To follow one, \
+first call find_slots with the wish included. If that finds nothing, call it \
+again without the wish.
+Then call book with one of the slots that find_slots returned. If find_slots \
+finds no slot for the firm rules, call give_up.
+"""
+
 NUDGE = "Reply by calling one of the tools."
 
 
@@ -58,10 +73,16 @@ class Trace:
     outcome: str  # "booked", "gave_up" or "out_of_turns"
 
 
-def run_agent(request: str, session: Session, llm: LLM, max_turns: int = 12) -> Trace:
+def run_agent(
+    request: str,
+    session: Session,
+    llm: LLM,
+    max_turns: int = 12,
+    system_prompt: str = SYSTEM_PROMPT,
+) -> Trace:
     """Let the model work on one request until it books, gives up, or runs out."""
     messages = [
-        {"role": "system", "content": SYSTEM_PROMPT},
+        {"role": "system", "content": system_prompt},
         {"role": "user", "content": request},
     ]
     steps = []
