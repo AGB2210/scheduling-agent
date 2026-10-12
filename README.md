@@ -11,8 +11,10 @@ solver tool.
 
 ## Status
 
-Work in progress. The calendar world is being built first; there are no model
-results yet.
+Work in progress. The agent runs on a local model and is being improved on a
+practice set. There are no final results yet: the numbers so far come from the
+practice set, which the agent has been tuned on. They are recorded, with the
+changes that did not help, in [docs/experiments.md](docs/experiments.md).
 
 ## Running
 
