@@ -3,9 +3,7 @@
 import random
 
 from schedagent.rules import ALL_DAYS, MeetingRules, Window
-from schedagent.slots import SLOTS_PER_DAY, slot_to_time
-
-DAY_NAMES = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
+from schedagent.slots import DAY_NAMES, SLOTS_PER_DAY, slot_to_time
 
 LENGTHS = {
     1: ["30 minutes", "half an hour"],

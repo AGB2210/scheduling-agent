@@ -1,8 +1,9 @@
 import pytest
 
 from schedagent.generator import make_task
-from schedagent.request import DAY_NAMES, write_request
+from schedagent.request import write_request
 from schedagent.rules import ALL_DAYS, MeetingRules, Window
+from schedagent.slots import DAY_NAMES
 
 MON, TUE, WED, THU, FRI = range(5)
 SEEDS = range(200)
