@@ -15,10 +15,6 @@ class ToolError(Exception):
     """A mistake in a tool call that the agent should be told about."""
 
 
-class NoArgs(BaseModel, extra="forbid"):
-    pass
-
-
 class GetBusyArgs(BaseModel, extra="forbid"):
     person: str
 
@@ -63,9 +59,6 @@ class Session:
             return f"Error: {'; '.join(problems)}"
         except ToolError as error:
             return f"Error: {error}"
-
-    def _list_people(self, args: NoArgs) -> str:
-        return json.dumps(self.calendar.people)
 
     def _get_busy(self, args: GetBusyArgs) -> str:
         self._require_known([args.person])
@@ -124,10 +117,10 @@ class Tool:
     run: Callable[[Session, BaseModel], str]
 
 
+# Every tool takes at least one argument. A tool with none (list_people, since
+# removed) led the model to invent arguments, and then to copy that mistake
+# into its later calls.
 TOOLS = {
-    "list_people": Tool(
-        "List everyone who has a calendar.", NoArgs, Session._list_people
-    ),
     "get_busy": Tool(
         "Show when one person is busy this week.", GetBusyArgs, Session._get_busy
     ),

@@ -29,14 +29,13 @@ def tool_call_message(name, **arguments):
     return Message(role="assistant", content="", tool_calls=[call])
 
 
-def test_tool_schemas_describe_all_four_tools():
+def test_tool_schemas_describe_every_tool():
     schemas = {schema["function"]["name"]: schema["function"] for schema in tool_schemas()}
-    assert set(schemas) == {"list_people", "get_busy", "book", "give_up"}
+    assert set(schemas) == {"get_busy", "book", "give_up"}
     assert all(schema["type"] == "function" for schema in tool_schemas())
     book = schemas["book"]
     assert book["description"].startswith("Book the meeting.")
     assert set(book["parameters"]["required"]) == {"attendees", "day", "start", "end"}
-    assert schemas["list_people"]["parameters"]["properties"] == {}
 
 
 def test_a_tool_call_from_the_model_becomes_a_reply():

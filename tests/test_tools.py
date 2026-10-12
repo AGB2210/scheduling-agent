@@ -32,10 +32,6 @@ def book_args(**changes):
     return {**args, **changes}
 
 
-def test_list_people(session):
-    assert json.loads(session.call("list_people", {})) == ["Meera", "Ravi"]
-
-
 def test_get_busy_shows_days_and_clock_times(session):
     assert json.loads(session.call("get_busy", {"person": "Ravi"})) == [
         {"day": "Monday", "start": "09:00", "end": "10:00"}
@@ -130,5 +126,11 @@ def test_nothing_runs_after_the_task_is_finished(session):
 
 
 def test_every_tool_has_a_description():
-    assert set(TOOLS) == {"list_people", "get_busy", "book", "give_up"}
+    assert set(TOOLS) == {"get_busy", "book", "give_up"}
     assert all(tool.description for tool in TOOLS.values())
+
+
+def test_every_tool_takes_at_least_one_argument():
+    # A tool with no arguments made the model invent some. See tools.py.
+    for tool in TOOLS.values():
+        assert tool.args.model_json_schema().get("required")

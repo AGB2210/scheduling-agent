@@ -8,6 +8,7 @@ from schedagent.report import format_summary, summarise
 from schedagent.runner import load_run, run_set
 from schedagent.server import running_ollama
 from schedagent.sets import practice_seeds
+from schedagent.tools import TOOLS
 
 
 def main(argv: list[str] | None = None) -> None:
@@ -55,7 +56,7 @@ def _run(model: str, out: Path, limit: int | None) -> None:
             flush=True,
         )
 
-    settings = {"model": model, "options": model_options()}
+    settings = {"model": model, "options": model_options(), "tools": sorted(TOOLS)}
     with running_ollama() as client:
         ran = run_set(seeds, local_model(client, model), settings, out, on_task=show)
     print(f"Ran {ran} tasks. Saved in {out}")
