@@ -1,6 +1,9 @@
+from pathlib import Path
+
 import pytest
 
 from schedagent.generator import make_task
+from schedagent.sets import held_out_seeds
 from schedagent.rules import MeetingRules, Window
 from schedagent.testset import (
     check_worksheet,
@@ -175,3 +178,13 @@ def test_check_finds_nothing_wrong_with_complete_requests(tmp_path):
     write_worksheet(path, SEEDS)
     fill(path, [f"Get {names(seed).lower()} together." for seed in SEEDS])
     assert check_worksheet(path, SEEDS) == []
+
+
+def test_the_committed_test_set_is_complete():
+    worksheet = Path(__file__).parents[1] / "data" / "test" / "worksheet.txt"
+    seeds = held_out_seeds()
+    tasks = load_test_tasks(worksheet, seeds)
+    assert len(tasks) == 100
+    assert check_worksheet(worksheet, seeds) == []
+    # The requests are not the generated ones.
+    assert all(task.request != make_task(task.seed).request for task in tasks)

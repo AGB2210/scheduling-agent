@@ -17,7 +17,7 @@ Task 1 of 100 (seed 5000)
   Days (firm): not Wednesday
   Hours (firm): any time
   Wish (optional): end by 12:00
-Request: 
+Request: Could you set up a 90-minute meeting for Divya and Rohan on any day except Wednesday? Ideally, we’d finish by noon.
 
 Task 2 of 100 (seed 5001)
   Who: Nisha, Tara
@@ -25,7 +25,7 @@ Task 2 of 100 (seed 5001)
   Days (firm): any day
   Hours (firm): any time
   Wish (optional): on Friday
-Request: 
+Request: Can we find an hour and a half for Nisha and Tara to meet? Friday would be my first choice, but another day works too.
 
 Task 3 of 100 (seed 5002)
   Who: Kabir, Nisha, Ravi
@@ -33,7 +33,7 @@ Task 3 of 100 (seed 5002)
   Days (firm): not Monday, not Friday
   Hours (firm): any time
   Wish (optional): none
-Request: 
+Request: Please arrange a one-hour meeting with Kabir, Nisha, and Ravi. It can’t be on Monday or Friday.
 
 Task 4 of 100 (seed 5003)
   Who: Arjun, Kabir, Rohan
@@ -41,7 +41,7 @@ Task 4 of 100 (seed 5003)
   Days (firm): only Tuesday, Thursday
   Hours (firm): must end by 12:00
   Wish (optional): none
-Request: 
+Request: Could you schedule 90 minutes for Arjun, Kabir, and Rohan on either Tuesday or Thursday? We need to be finished by noon.
 
 Task 5 of 100 (seed 5004)
   Who: Arjun, Tara
@@ -49,7 +49,7 @@ Task 5 of 100 (seed 5004)
   Days (firm): only Monday, Tuesday
   Hours (firm): any time
   Wish (optional): start at or after 13:00
-Request: 
+Request: Can you find a two-hour slot for Arjun and Tara on Monday or Tuesday? An afternoon start (1 p.m. or later) would be preferable, if possible.
 
 Task 6 of 100 (seed 5005)
   Who: Divya, Ravi
@@ -57,7 +57,7 @@ Task 6 of 100 (seed 5005)
   Days (firm): only Tuesday, Wednesday
   Hours (firm): any time
   Wish (optional): on Wednesday
-Request: 
+Request: Please get Divya and Ravi together for 90 minutes on Tuesday or Wednesday. Wednesday would be ideal.
 
 Task 7 of 100 (seed 5006)
   Who: Arjun, Nisha, Ravi
@@ -65,7 +65,7 @@ Task 7 of 100 (seed 5006)
   Days (firm): only Tuesday, Thursday
   Hours (firm): cannot start before 13:00
   Wish (optional): none
-Request: 
+Request: Could you arrange a 90-minute meeting with Arjun, Nisha, and Ravi on Tuesday or Thursday? It must start at 1 p.m. or later.
 
 Task 8 of 100 (seed 5007)
   Who: Kabir, Nisha, Tara
@@ -73,7 +73,7 @@ Task 8 of 100 (seed 5007)
   Days (firm): not Tuesday, not Friday
   Hours (firm): any time
   Wish (optional): end by 12:00
-Request: 
+Request: Can Kabir, Nisha, and Tara meet for half an hour on any day except Tuesday and Friday? It would be great to finish before noon.
 
 Task 9 of 100 (seed 5008)
   Who: Arjun, Nisha
@@ -81,7 +81,7 @@ Task 9 of 100 (seed 5008)
   Days (firm): only Monday, Tuesday
   Hours (firm): must end by 12:00
   Wish (optional): on Monday
-Request: 
+Request: I need a two-hour slot for Arjun and Nisha on Monday or Tuesday, and we must wrap up by noon. Monday would be best.
 
 Task 10 of 100 (seed 5009)
   Who: Arjun, Kabir, Tara
@@ -89,7 +89,7 @@ Task 10 of 100 (seed 5009)
   Days (firm): not Monday, not Friday
   Hours (firm): any time
   Wish (optional): none
-Request: 
+Request: Could you set aside 90 minutes for Arjun, Kabir, and Tara on any day other than Monday or Friday?
 
 Task 11 of 100 (seed 5010)
   Who: Kabir, Ravi
@@ -97,7 +97,7 @@ Task 11 of 100 (seed 5010)
   Days (firm): only Wednesday, Friday
   Hours (firm): cannot start before 13:00
   Wish (optional): on Wednesday
-Request: 
+Request: Kabir and Ravi need a one-hour catch-up, preferably on Wednesday. It has to be scheduled for 1 p.m. or later, and Wednesday or Friday are the only options.
 
 Task 12 of 100 (seed 5011)
   Who: Meera, Nisha
@@ -105,7 +105,7 @@ Task 12 of 100 (seed 5011)
   Days (firm): only Monday, Tuesday
   Hours (firm): any time
   Wish (optional): end by 12:00
-Request: 
+Request: Find a two-hour window for Meera and Nisha on Monday or Tuesday. If we can get it done before noon, even better.
 
 Task 13 of 100 (seed 5012)
   Who: Arjun, Meera
@@ -113,7 +113,7 @@ Task 13 of 100 (seed 5012)
   Days (firm): any day
   Hours (firm): must end by 12:00
   Wish (optional): on Monday
-Request: 
+Request: I’m looking to arrange a quick 30-minute discussion between Arjun and Meera. Any day is fine, but we need to finish by 12 p.m. Monday would be nice.
 
 Task 14 of 100 (seed 5013)
   Who: Kabir, Nisha, Tara
@@ -121,7 +121,7 @@ Task 14 of 100 (seed 5013)
   Days (firm): not Friday
   Hours (firm): cannot start before 13:00
   Wish (optional): none
-Request: 
+Request: Please coordinate a 90-minute session with Kabir, Nisha, and Tara. Keep it to a start at 1 p.m. or later, and don’t schedule it on Friday.
 
 Task 15 of 100 (seed 5014)
   Who: Nisha, Tara
@@ -129,7 +129,7 @@ Task 15 of 100 (seed 5014)
   Days (firm): only Monday, Friday
   Hours (firm): any time
   Wish (optional): start at or after 13:00
-Request: 
+Request: Could Nisha and Tara spare half an hour on either Monday or Friday? An afternoon slot (1 p.m. or later) would suit me better.
 
 Task 16 of 100 (seed 5015)
   Who: Divya, Rohan
@@ -137,7 +137,7 @@ Task 16 of 100 (seed 5015)
   Days (firm): only Monday, Friday
   Hours (firm): cannot start before 13:00
   Wish (optional): none
-Request: 
+Request: We need two hours with Divya and Rohan. Monday or Friday are the available days, and the meeting cannot begin before 1 p.m.
 
 Task 17 of 100 (seed 5016)
   Who: Divya, Kabir
@@ -145,7 +145,7 @@ Task 17 of 100 (seed 5016)
   Days (firm): any day
   Hours (firm): any time
   Wish (optional): start at or after 13:00
-Request: 
+Request: Can you find an hour for Divya and Kabir? I’d prefer to start sometime in the afternoon (1 p.m. or later), though any day and time is acceptable.
 
 Task 18 of 100 (seed 5017)
   Who: Divya, Meera
@@ -153,7 +153,7 @@ Task 18 of 100 (seed 5017)
   Days (firm): not Friday
   Hours (firm): any time
   Wish (optional): start at or after 13:00
-Request: 
+Request: Let’s get Divya and Meera together for an hour and a half on any day except Friday. Starting after lunch (1 p.m. or later) would be ideal, if their schedules allow it.
 
 Task 19 of 100 (seed 5018)
   Who: Arjun, Divya, Kabir
@@ -161,7 +161,7 @@ Task 19 of 100 (seed 5018)
   Days (firm): only Monday, Tuesday
   Hours (firm): any time
   Wish (optional): end by 12:00
-Request: 
+Request: Please find 30 minutes for Arjun, Divya, and Kabir on Monday or Tuesday. Finishing before noon would be a bonus.
 
 Task 20 of 100 (seed 5019)
   Who: Divya, Ravi
@@ -169,7 +169,7 @@ Task 20 of 100 (seed 5019)
   Days (firm): only Monday, Wednesday
   Hours (firm): any time
   Wish (optional): none
-Request: 
+Request: Divya and Ravi need a two-hour meeting. Please look at Monday or Wednesday; there’s no particular time preference.
 
 Task 21 of 100 (seed 5020)
   Who: Nisha, Ravi, Tara
@@ -177,7 +177,7 @@ Task 21 of 100 (seed 5020)
   Days (firm): any day
   Hours (firm): any time
   Wish (optional): start at or after 13:00
-Request: 
+Request: Any chance you could get Nisha, Ravi, and Tara together for an hour and a half? An afternoon start (1 p.m. or later) would be preferable, but we’re flexible on the day.
 
 Task 22 of 100 (seed 5021)
   Who: Nisha, Ravi, Rohan
@@ -185,7 +185,7 @@ Task 22 of 100 (seed 5021)
   Days (firm): not Tuesday
   Hours (firm): any time
   Wish (optional): end by 12:00
-Request: 
+Request: I need to book a one-hour catch-up for Nisha, Ravi, and Rohan. Just make sure it’s not Tuesday; wrapping up before noon would be a plus.
 
 Task 23 of 100 (seed 5022)
   Who: Arjun, Divya
@@ -193,7 +193,7 @@ Task 23 of 100 (seed 5022)
   Days (firm): not Monday, not Tuesday
   Hours (firm): any time
   Wish (optional): end by 12:00
-Request: 
+Request: Could you help coordinate a 90-minute meeting for Arjun and Divya? Monday and Tuesday are out, and it’d be nice if we could finish before midday.
 
 Task 24 of 100 (seed 5023)
   Who: Arjun, Tara
@@ -201,7 +201,7 @@ Task 24 of 100 (seed 5023)
   Days (firm): not Thursday
   Hours (firm): any time
   Wish (optional): end by 12:00
-Request: 
+Request: Let’s find an hour for Arjun and Tara to connect. Any day except Thursday is fine, and a morning slot that finishes by noon would be ideal.
 
 Task 25 of 100 (seed 5024)
   Who: Nisha, Ravi
@@ -209,7 +209,7 @@ Task 25 of 100 (seed 5024)
   Days (firm): not Monday, not Thursday
   Hours (firm): any time
   Wish (optional): on Tuesday
-Request: 
+Request: Nisha and Ravi need a two-hour session, but Monday and Thursday won’t work. Tuesday is my preferred option if we can make it happen.
 
 Task 26 of 100 (seed 5025)
   Who: Divya, Ravi, Tara
@@ -217,7 +217,7 @@ Task 26 of 100 (seed 5025)
   Days (firm): only Monday, Wednesday
   Hours (firm): any time
   Wish (optional): on Wednesday
-Request: 
+Request: Please pencil in a quick half-hour meeting for Divya, Ravi, and Tara, either Monday or Wednesday. Wednesday would be my pick.
 
 Task 27 of 100 (seed 5026)
   Who: Arjun, Kabir
@@ -225,7 +225,7 @@ Task 27 of 100 (seed 5026)
   Days (firm): not Monday, not Wednesday
   Hours (firm): any time
   Wish (optional): none
-Request: 
+Request: We need to get Arjun and Kabir together for an hour. Could you find a suitable slot on Tuesday, Thursday, or Friday?
 
 Task 28 of 100 (seed 5027)
   Who: Arjun, Nisha, Ravi
@@ -233,7 +233,7 @@ Task 28 of 100 (seed 5027)
   Days (firm): not Wednesday, not Friday
   Hours (firm): cannot start before 13:00
   Wish (optional): none
-Request: 
+Request: Can you organize a two-hour discussion with Arjun, Nisha, and Ravi? It needs to start at 1 p.m. or later, and Wednesday and Friday are unavailable.
 
 Task 29 of 100 (seed 5028)
   Who: Nisha, Ravi
@@ -241,7 +241,7 @@ Task 29 of 100 (seed 5028)
   Days (firm): not Monday
   Hours (firm): any time
   Wish (optional): end by 12:00
-Request: 
+Request: I’m trying to fit in a two-hour meeting for Nisha and Ravi. Any day other than Monday works, and ideally we’d be done by noon.
 
 Task 30 of 100 (seed 5029)
   Who: Arjun, Divya
@@ -249,7 +249,7 @@ Task 30 of 100 (seed 5029)
   Days (firm): not Wednesday
   Hours (firm): cannot start before 13:00
   Wish (optional): none
-Request: 
+Request: Could you arrange a 30-minute meeting for Arjun and Divya in the afternoon? Please avoid Wednesday, and don’t schedule it to start before 1 p.m.
 
 Task 31 of 100 (seed 5030)
   Who: Divya, Ravi, Rohan
@@ -257,7 +257,7 @@ Task 31 of 100 (seed 5030)
   Days (firm): any day
   Hours (firm): cannot start before 13:00
   Wish (optional): on Wednesday
-Request: 
+Request: Please arrange a 30-minute meeting for Divya, Ravi, and Rohan. The meeting can take place any day, but it must begin at 1 p.m. or later. Wednesday would be preferable.
 
 Task 32 of 100 (seed 5031)
   Who: Divya, Nisha, Ravi
@@ -265,7 +265,7 @@ Task 32 of 100 (seed 5031)
   Days (firm): not Wednesday, not Thursday
   Hours (firm): any time
   Wish (optional): on Tuesday
-Request: 
+Request: I’d like to schedule a two-hour discussion with Divya, Nisha, and Ravi. Please avoid Wednesday and Thursday; Tuesday would be the preferred day.
 
 Task 33 of 100 (seed 5032)
   Who: Kabir, Nisha, Rohan
@@ -273,7 +273,7 @@ Task 33 of 100 (seed 5032)
   Days (firm): any day
   Hours (firm): cannot start before 13:00
   Wish (optional): none
-Request: 
+Request: Could you coordinate a half-hour session with Kabir, Nisha, and Rohan? We can use any day, provided the meeting starts no earlier than 1 p.m.
 
 Task 34 of 100 (seed 5033)
   Who: Arjun, Kabir
@@ -281,7 +281,7 @@ Task 34 of 100 (seed 5033)
   Days (firm): not Monday, not Thursday
   Hours (firm): any time
   Wish (optional): on Friday
-Request: 
+Request: Please find a two-hour slot for Arjun and Kabir, excluding Monday and Thursday. If possible, Friday would be ideal.
 
 Task 35 of 100 (seed 5034)
   Who: Arjun, Ravi, Rohan
@@ -289,7 +289,7 @@ Task 35 of 100 (seed 5034)
   Days (firm): only Monday, Tuesday
   Hours (firm): any time
   Wish (optional): on Tuesday
-Request: 
+Request: We need a 30-minute meeting with Arjun, Ravi, and Rohan on either Monday or Tuesday. Tuesday would be the more convenient option.
 
 Task 36 of 100 (seed 5035)
   Who: Divya, Ravi
@@ -297,7 +297,7 @@ Task 36 of 100 (seed 5035)
   Days (firm): not Monday, not Friday
   Hours (firm): must end by 12:00
   Wish (optional): on Tuesday
-Request: 
+Request: Would you please schedule 90 minutes for Divya and Ravi? The meeting must finish by noon and cannot be held on Monday or Friday. Tuesday would be our first choice.
 
 Task 37 of 100 (seed 5036)
   Who: Meera, Nisha, Ravi
@@ -305,7 +305,7 @@ Task 37 of 100 (seed 5036)
   Days (firm): not Friday
   Hours (firm): any time
   Wish (optional): start at or after 13:00
-Request: 
+Request: Please coordinate a two-hour meeting for Meera, Nisha, and Ravi on any day except Friday. An afternoon start (1 p.m. or later) would be preferable.
 
 Task 38 of 100 (seed 5037)
   Who: Arjun, Divya
@@ -313,7 +313,7 @@ Task 38 of 100 (seed 5037)
   Days (firm): not Tuesday, not Friday
   Hours (firm): any time
   Wish (optional): end by 12:00
-Request: 
+Request: I’d appreciate it if you could arrange a 90-minute meeting between Arjun and Divya. Tuesday and Friday are unavailable, and finishing before noon would be ideal.
 
 Task 39 of 100 (seed 5038)
   Who: Divya, Meera, Rohan
@@ -321,7 +321,7 @@ Task 39 of 100 (seed 5038)
   Days (firm): not Wednesday, not Friday
   Hours (firm): cannot start before 13:00
   Wish (optional): on Tuesday
-Request: 
+Request: Please organize a 90-minute session for Divya, Meera, and Rohan. It must start at 1 p.m. or later, and neither Wednesday nor Friday is suitable. Tuesday is preferred.
 
 Task 40 of 100 (seed 5039)
   Who: Arjun, Ravi, Tara
@@ -329,7 +329,7 @@ Task 40 of 100 (seed 5039)
   Days (firm): any day
   Hours (firm): any time
   Wish (optional): end by 12:00
-Request: 
+Request: Could you schedule a brief, 30-minute meeting for Arjun, Ravi, and Tara? Any day or time works, although a finish before noon would be appreciated.
 
 Task 41 of 100 (seed 5040)
   Who: Meera, Tara
@@ -337,7 +337,7 @@ Task 41 of 100 (seed 5040)
   Days (firm): not Tuesday, not Thursday
   Hours (firm): any time
   Wish (optional): none
-Request: 
+Request: Could Meera and Tara get two hours together sometime this week? Just make sure it’s not Tuesday or Thursday.
 
 Task 42 of 100 (seed 5041)
   Who: Arjun, Kabir, Tara
@@ -345,7 +345,7 @@ Task 42 of 100 (seed 5041)
   Days (firm): any day
   Hours (firm): must end by 12:00
   Wish (optional): none
-Request: 
+Request: I need to get Arjun, Kabir, and Tara together for an hour and a half. Any day is fine, but we’ll have to wrap up by noon.
 
 Task 43 of 100 (seed 5042)
   Who: Meera, Ravi
@@ -353,7 +353,7 @@ Task 43 of 100 (seed 5042)
   Days (firm): any day
   Hours (firm): any time
   Wish (optional): end by 12:00
-Request: 
+Request: Can you find a one-hour slot for Meera and Ravi? There’s no particular day requirement, though finishing before midday would be great.
 
 Task 44 of 100 (seed 5043)
   Who: Ravi, Tara
@@ -361,7 +361,7 @@ Task 44 of 100 (seed 5043)
   Days (firm): not Monday, not Wednesday
   Hours (firm): any time
   Wish (optional): none
-Request: 
+Request: Let’s set up an hour for Ravi and Tara to catch up. Monday and Wednesday are off the table, but any other day works.
 
 Task 45 of 100 (seed 5044)
   Who: Arjun, Meera
@@ -369,7 +369,7 @@ Task 45 of 100 (seed 5044)
   Days (firm): not Tuesday, not Wednesday
   Hours (firm): any time
   Wish (optional): none
-Request: 
+Request: Please find 30 minutes for Arjun and Meera to meet. We can do any day except Tuesday or Wednesday.
 
 Task 46 of 100 (seed 5045)
   Who: Meera, Ravi
@@ -377,7 +377,7 @@ Task 46 of 100 (seed 5045)
   Days (firm): not Wednesday
   Hours (firm): any time
   Wish (optional): start at or after 13:00
-Request: 
+Request: Meera and Ravi need a two-hour block. Any day other than Wednesday is okay, and an afternoon start (1 p.m. or later) would suit us best.
 
 Task 47 of 100 (seed 5046)
   Who: Divya, Meera, Tara
@@ -385,7 +385,7 @@ Task 47 of 100 (seed 5046)
   Days (firm): any day
   Hours (firm): must end by 12:00
   Wish (optional): on Thursday
-Request: 
+Request: Any chance we can schedule 90 minutes for Divya, Meera, and Tara? We have to finish by noon, and Thursday would be the best day if it’s available.
 
 Task 48 of 100 (seed 5047)
   Who: Divya, Kabir, Nisha
@@ -393,7 +393,7 @@ Task 48 of 100 (seed 5047)
   Days (firm): not Thursday
   Hours (firm): any time
   Wish (optional): start at or after 13:00
-Request: 
+Request: Could you fit in an hour and a half with Divya, Kabir, and Nisha? Thursday won’t work, and a start after lunch (1 p.m. or later) would be preferable.
 
 Task 49 of 100 (seed 5048)
   Who: Arjun, Ravi, Rohan
@@ -401,7 +401,7 @@ Task 49 of 100 (seed 5048)
   Days (firm): not Friday
   Hours (firm): cannot start before 13:00
   Wish (optional): on Tuesday
-Request: 
+Request: I’m looking to book two hours for Arjun, Ravi, and Rohan. It needs to start at 1 p.m. or later, and Tuesday would be ideal, though another day besides Friday is fine.
 
 Task 50 of 100 (seed 5049)
   Who: Divya, Kabir, Meera
@@ -409,7 +409,7 @@ Task 50 of 100 (seed 5049)
   Days (firm): only Monday, Wednesday
   Hours (firm): any time
   Wish (optional): on Monday
-Request: 
+Request: Can you arrange a quick half-hour meeting for Divya, Kabir, and Meera on Monday or Wednesday? Monday is my preference.
 
 Task 51 of 100 (seed 5050)
   Who: Divya, Kabir, Meera
@@ -417,7 +417,7 @@ Task 51 of 100 (seed 5050)
   Days (firm): not Tuesday, not Wednesday
   Hours (firm): any time
   Wish (optional): on Monday
-Request: 
+Request: Could we get Divya, Kabir, and Meera together for 30 minutes? Any day except Tuesday or Wednesday works, and Monday would be my preference.
 
 Task 52 of 100 (seed 5051)
   Who: Arjun, Meera, Nisha
@@ -425,7 +425,7 @@ Task 52 of 100 (seed 5051)
   Days (firm): only Monday, Friday
   Hours (firm): must end by 12:00
   Wish (optional): none
-Request: 
+Request: I need to arrange a 90-minute meeting with Arjun, Meera, and Nisha. Monday or Friday are the only options, and we must be finished by noon.
 
 Task 53 of 100 (seed 5052)
   Who: Divya, Tara
@@ -433,7 +433,7 @@ Task 53 of 100 (seed 5052)
   Days (firm): only Thursday, Friday
   Hours (firm): cannot start before 13:00
   Wish (optional): on Thursday
-Request: 
+Request: Let’s find an hour and a half for Divya and Tara on Thursday or Friday. The meeting can’t start before 1 p.m., and Thursday would be better if possible.
 
 Task 54 of 100 (seed 5053)
   Who: Ravi, Rohan
@@ -441,7 +441,7 @@ Task 54 of 100 (seed 5053)
   Days (firm): only Tuesday, Thursday
   Hours (firm): any time
   Wish (optional): none
-Request: 
+Request: Can you block out two hours for Ravi and Rohan on either Tuesday or Thursday? There’s no preferred time, so whichever slot suits them is fine.
 
 Task 55 of 100 (seed 5054)
   Who: Arjun, Nisha, Tara
@@ -449,7 +449,7 @@ Task 55 of 100 (seed 5054)
   Days (firm): any day
   Hours (firm): any time
   Wish (optional): on Wednesday
-Request: 
+Request: I’d like to set up a 90-minute discussion with Arjun, Nisha, and Tara. We’re flexible about the time and day, but Wednesday would be especially convenient.
 
 Task 56 of 100 (seed 5055)
   Who: Meera, Nisha, Rohan
@@ -457,7 +457,7 @@ Task 56 of 100 (seed 5055)
   Days (firm): any day
   Hours (firm): any time
   Wish (optional): end by 12:00
-Request: 
+Request: Please find an hour for Meera, Nisha, and Rohan to meet. Any day and time is fine, although wrapping up before noon would be ideal.
 
 Task 57 of 100 (seed 5056)
   Who: Kabir, Nisha, Rohan
@@ -465,7 +465,7 @@ Task 57 of 100 (seed 5056)
   Days (firm): only Monday, Friday
   Hours (firm): any time
   Wish (optional): start at or after 13:00
-Request: 
+Request: Could you reserve two hours for Kabir, Nisha, and Rohan on Monday or Friday? If we can start in the afternoon (1 p.m. or later), that would be great.
 
 Task 58 of 100 (seed 5057)
   Who: Kabir, Nisha, Ravi
@@ -473,7 +473,7 @@ Task 58 of 100 (seed 5057)
   Days (firm): not Wednesday, not Friday
   Hours (firm): must end by 12:00
   Wish (optional): on Tuesday
-Request: 
+Request: We need a quick 30-minute slot for Kabir, Nisha, and Ravi. Please avoid Wednesday and Friday, and make sure the meeting finishes by noon. Tuesday would be the best option.
 
 Task 59 of 100 (seed 5058)
   Who: Kabir, Meera
@@ -481,7 +481,7 @@ Task 59 of 100 (seed 5058)
   Days (firm): any day
   Hours (firm): any time
   Wish (optional): on Tuesday
-Request: 
+Request: Can you squeeze in a half-hour catch-up for Kabir and Meera? There are no restrictions on the day or time, but Tuesday would be nice.
 
 Task 60 of 100 (seed 5059)
   Who: Kabir, Ravi
@@ -489,7 +489,7 @@ Task 60 of 100 (seed 5059)
   Days (firm): not Monday
   Hours (firm): cannot start before 13:00
   Wish (optional): none
-Request: 
+Request: Please arrange 30 minutes for Kabir and Ravi on any day except Monday. The meeting must begin at 1 p.m. or later.
 
 Task 61 of 100 (seed 5060)
   Who: Arjun, Divya, Nisha
@@ -497,7 +497,7 @@ Task 61 of 100 (seed 5060)
   Days (firm): not Friday
   Hours (firm): any time
   Wish (optional): on Wednesday
-Request: 
+Request: Please coordinate a two-hour meeting for Arjun, Divya, and Nisha. Wednesday would be ideal, but we can use any day other than Friday.
 
 Task 62 of 100 (seed 5061)
   Who: Kabir, Nisha, Ravi
@@ -505,7 +505,7 @@ Task 62 of 100 (seed 5061)
   Days (firm): any day
   Hours (firm): any time
   Wish (optional): start at or after 13:00
-Request: 
+Request: Need to get Kabir, Nisha, and Ravi together for an hour. Any day works, preferably with a start time of 1 p.m. or later.
 
 Task 63 of 100 (seed 5062)
   Who: Ravi, Rohan, Tara
@@ -513,7 +513,7 @@ Task 63 of 100 (seed 5062)
   Days (firm): not Tuesday
   Hours (firm): must end by 12:00
   Wish (optional): on Thursday
-Request: 
+Request: Could Ravi, Rohan, and Tara meet for 30 minutes, ideally on Thursday? We need to finish by noon, and Tuesday is not an option.
 
 Task 64 of 100 (seed 5063)
   Who: Divya, Nisha
@@ -521,7 +521,7 @@ Task 64 of 100 (seed 5063)
   Days (firm): only Thursday, Friday
   Hours (firm): cannot start before 13:00
   Wish (optional): on Friday
-Request: 
+Request: Let's arrange a half-hour meeting for Divya and Nisha on Thursday or Friday. It has to start at 1 p.m. or later; Friday would be my first choice.
 
 Task 65 of 100 (seed 5064)
   Who: Arjun, Tara
@@ -529,7 +529,7 @@ Task 65 of 100 (seed 5064)
   Days (firm): any day
   Hours (firm): any time
   Wish (optional): end by 12:00
-Request: 
+Request: Find a two-hour slot for Arjun and Tara. The schedule is flexible, but finishing by noon would be preferable.
 
 Task 66 of 100 (seed 5065)
   Who: Arjun, Rohan
@@ -537,7 +537,7 @@ Task 66 of 100 (seed 5065)
   Days (firm): any day
   Hours (firm): any time
   Wish (optional): start at or after 13:00
-Request: 
+Request: Can we set aside two hours for Arjun and Rohan? Any day is fine, though an afternoon start (1 p.m. or later) would work better.
 
 Task 67 of 100 (seed 5066)
   Who: Divya, Kabir, Meera
@@ -545,7 +545,7 @@ Task 67 of 100 (seed 5066)
   Days (firm): not Tuesday, not Thursday
   Hours (firm): any time
   Wish (optional): on Wednesday
-Request: 
+Request: Please set up a two-hour session for Divya, Kabir, and Meera. Tuesday and Thursday are out, and Wednesday is preferred.
 
 Task 68 of 100 (seed 5067)
   Who: Kabir, Nisha, Tara
@@ -553,7 +553,7 @@ Task 68 of 100 (seed 5067)
   Days (firm): not Monday, not Friday
   Hours (firm): cannot start before 13:00
   Wish (optional): none
-Request: 
+Request: We need two hours with Kabir, Nisha, and Tara, starting no earlier than 1 p.m. Monday and Friday won't work.
 
 Task 69 of 100 (seed 5068)
   Who: Arjun, Rohan
@@ -561,7 +561,7 @@ Task 69 of 100 (seed 5068)
   Days (firm): any day
   Hours (firm): any time
   Wish (optional): on Friday
-Request: 
+Request: Could you book a quick 30-minute catch-up for Arjun and Rohan? We're open on both the day and time, but Friday would be nice.
 
 Task 70 of 100 (seed 5069)
   Who: Meera, Nisha, Rohan
@@ -569,7 +569,7 @@ Task 70 of 100 (seed 5069)
   Days (firm): not Monday, not Friday
   Hours (firm): any time
   Wish (optional): end by 12:00
-Request: 
+Request: I'd like to schedule 90 minutes for Meera, Nisha, and Rohan. Please avoid Monday and Friday; if possible, have us wrapped up by noon.
 
 Task 71 of 100 (seed 5070)
   Who: Divya, Kabir, Ravi
@@ -577,7 +577,7 @@ Task 71 of 100 (seed 5070)
   Days (firm): not Monday, not Thursday
   Hours (firm): cannot start before 13:00
   Wish (optional): none
-Request: 
+Request: Hey, could you find 30 minutes for Divya, Kabir, and Ravi to meet? Any day except Monday or Thursday is fine, but we can’t start before 1 p.m.
 
 Task 72 of 100 (seed 5071)
   Who: Divya, Tara
@@ -585,7 +585,7 @@ Task 72 of 100 (seed 5071)
   Days (firm): only Monday, Wednesday
   Hours (firm): must end by 12:00
   Wish (optional): on Wednesday
-Request: 
+Request: I’m hoping to arrange a 90-minute meeting for Divya and Tara on Monday or Wednesday. We have to be done by noon, and Wednesday would be my preferred choice.
 
 Task 73 of 100 (seed 5072)
   Who: Divya, Meera, Rohan
@@ -593,7 +593,7 @@ Task 73 of 100 (seed 5072)
   Days (firm): only Tuesday, Friday
   Hours (firm): cannot start before 13:00
   Wish (optional): on Friday
-Request: 
+Request: Can we get Divya, Meera, and Rohan together for two hours on Tuesday or Friday? The meeting needs to start at 1 p.m. or later, and Friday would be ideal.
 
 Task 74 of 100 (seed 5073)
   Who: Divya, Tara
@@ -601,7 +601,7 @@ Task 74 of 100 (seed 5073)
   Days (firm): any day
   Hours (firm): any time
   Wish (optional): start at or after 13:00
-Request: 
+Request: Would you mind finding a two-hour slot for Divya and Tara? We’re flexible on the day, but an afternoon start (1 p.m. or later) would be preferable.
 
 Task 75 of 100 (seed 5074)
   Who: Rohan, Tara
@@ -609,7 +609,7 @@ Task 75 of 100 (seed 5074)
   Days (firm): only Monday, Wednesday
   Hours (firm): cannot start before 13:00
   Wish (optional): on Wednesday
-Request: 
+Request: Let’s book 90 minutes for Rohan and Tara on either Monday or Wednesday. We can’t start before 1 p.m., and Wednesday would suit us best.
 
 Task 76 of 100 (seed 5075)
   Who: Arjun, Meera
@@ -617,7 +617,7 @@ Task 76 of 100 (seed 5075)
   Days (firm): not Monday, not Wednesday
   Hours (firm): cannot start before 13:00
   Wish (optional): none
-Request: 
+Request: Could you arrange a one-hour meeting for Arjun and Meera? Tuesday, Thursday, or Friday would work, provided it starts no earlier than 1 p.m.
 
 Task 77 of 100 (seed 5076)
   Who: Nisha, Tara
@@ -625,7 +625,7 @@ Task 77 of 100 (seed 5076)
   Days (firm): any day
   Hours (firm): any time
   Wish (optional): none
-Request: 
+Request: Please find a two-hour window for Nisha and Tara. There are no specific restrictions on the day or time, so just choose whatever works for both.
 
 Task 78 of 100 (seed 5077)
   Who: Arjun, Divya
@@ -633,7 +633,7 @@ Task 78 of 100 (seed 5077)
   Days (firm): not Monday, not Tuesday
   Hours (firm): must end by 12:00
   Wish (optional): none
-Request: 
+Request: Can you set up a quick 30-minute meeting for Arjun and Divya? Monday and Tuesday are unavailable, and we need to finish by noon.
 
 Task 79 of 100 (seed 5078)
   Who: Kabir, Nisha, Rohan
@@ -641,7 +641,7 @@ Task 79 of 100 (seed 5078)
   Days (firm): not Tuesday
   Hours (firm): any time
   Wish (optional): start at or after 13:00
-Request: 
+Request: I need two hours with Kabir, Nisha, and Rohan. Any day apart from Tuesday is fine, and starting in the afternoon (1 p.m. or later) would be better.
 
 Task 80 of 100 (seed 5079)
   Who: Arjun, Ravi
@@ -649,7 +649,7 @@ Task 80 of 100 (seed 5079)
   Days (firm): not Tuesday, not Friday
   Hours (firm): cannot start before 13:00
   Wish (optional): on Wednesday
-Request: 
+Request: Hey, can you coordinate a 90-minute session for Arjun and Ravi? It must start at 1 p.m. or later, Wednesday would be best, and Tuesday and Friday are out.
 
 Task 81 of 100 (seed 5080)
   Who: Kabir, Tara
@@ -657,7 +657,7 @@ Task 81 of 100 (seed 5080)
   Days (firm): not Tuesday, not Wednesday
   Hours (firm): any time
   Wish (optional): on Monday
-Request: 
+Request: Please arrange a two-hour meeting for Kabir and Tara on any day except Tuesday or Wednesday. Monday would be the preferred option.
 
 Task 82 of 100 (seed 5081)
   Who: Arjun, Meera
@@ -665,7 +665,7 @@ Task 82 of 100 (seed 5081)
   Days (firm): not Monday, not Thursday
   Hours (firm): must end by 12:00
   Wish (optional): none
-Request: 
+Request: I would like to schedule a one-hour meeting for Arjun and Meera. The meeting must take place on Tuesday, Wednesday, or Friday and conclude by noon.
 
 Task 83 of 100 (seed 5082)
   Who: Kabir, Ravi
@@ -673,7 +673,7 @@ Task 83 of 100 (seed 5082)
   Days (firm): not Friday
   Hours (firm): any time
   Wish (optional): on Monday
-Request: 
+Request: Could you coordinate a one-hour discussion between Kabir and Ravi? Friday is unavailable, and Monday would be preferable if their schedules permit.
 
 Task 84 of 100 (seed 5150)
   Who: Nisha, Ravi, Rohan
@@ -681,7 +681,7 @@ Task 84 of 100 (seed 5150)
   Days (firm): only Monday, Tuesday
   Hours (firm): must end by 12:00
   Wish (optional): none
-Request: 
+Request: Please schedule a two-hour meeting for Nisha, Ravi, and Rohan on either Monday or Tuesday. We must finish by noon, so an appropriate morning slot is essential.
 
 Task 85 of 100 (seed 5186)
   Who: Kabir, Nisha
@@ -689,7 +689,7 @@ Task 85 of 100 (seed 5186)
   Days (firm): not Monday, not Tuesday
   Hours (firm): must end by 12:00
   Wish (optional): on Thursday
-Request: 
+Request: I need to arrange a 90-minute session for Kabir and Nisha. It must be held on Wednesday, Thursday, or Friday and finish by noon. Thursday would be ideal.
 
 Task 86 of 100 (seed 5199)
   Who: Meera, Rohan
@@ -697,7 +697,7 @@ Task 86 of 100 (seed 5199)
   Days (firm): only Wednesday, Friday
   Hours (firm): cannot start before 13:00
   Wish (optional): none
-Request: 
+Request: Would you please find a two-hour slot for Meera and Rohan on Wednesday or Friday? The meeting must begin at 1 p.m. or later.
 
 Task 87 of 100 (seed 5214)
   Who: Arjun, Meera
@@ -705,7 +705,7 @@ Task 87 of 100 (seed 5214)
   Days (firm): only Wednesday, Thursday
   Hours (firm): must end by 12:00
   Wish (optional): on Thursday
-Request: 
+Request: Please coordinate a one-hour meeting for Arjun and Meera on Wednesday or Thursday. We need to conclude by noon, and Thursday is preferred.
 
 Task 88 of 100 (seed 5318)
   Who: Arjun, Kabir, Nisha
@@ -713,7 +713,7 @@ Task 88 of 100 (seed 5318)
   Days (firm): only Tuesday, Wednesday
   Hours (firm): must end by 12:00
   Wish (optional): none
-Request: 
+Request: Could you arrange a 90-minute meeting for Arjun, Kabir, and Nisha on Tuesday or Wednesday? The session must be completed by noon.
 
 Task 89 of 100 (seed 5340)
   Who: Kabir, Tara
@@ -721,7 +721,7 @@ Task 89 of 100 (seed 5340)
   Days (firm): only Monday, Tuesday
   Hours (firm): must end by 12:00
   Wish (optional): none
-Request: 
+Request: Please find a suitable 90-minute slot for Kabir and Tara on Monday or Tuesday. We need to finish the meeting by noon.
 
 Task 90 of 100 (seed 5359)
   Who: Divya, Ravi
@@ -729,7 +729,7 @@ Task 90 of 100 (seed 5359)
   Days (firm): only Monday, Tuesday
   Hours (firm): cannot start before 13:00
   Wish (optional): on Monday
-Request: 
+Request: I would like to arrange a 90-minute meeting for Divya and Ravi on Monday or Tuesday. It must start at 1 p.m. or later, with Monday being the preferred day.
 
 Task 91 of 100 (seed 5410)
   Who: Arjun, Rohan
@@ -737,7 +737,7 @@ Task 91 of 100 (seed 5410)
   Days (firm): not Monday, not Friday
   Hours (firm): must end by 12:00
   Wish (optional): none
-Request: 
+Request: Please book two hours for Arjun and Rohan on any day except Monday or Friday. We need to finish by noon.
 
 Task 92 of 100 (seed 5423)
   Who: Nisha, Tara
@@ -745,7 +745,7 @@ Task 92 of 100 (seed 5423)
   Days (firm): not Wednesday
   Hours (firm): must end by 12:00
   Wish (optional): on Friday
-Request: 
+Request: Can you arrange a two-hour meeting for Nisha and Tara on any day other than Wednesday? Friday would be preferable, and we must wrap up by noon.
 
 Task 93 of 100 (seed 5453)
   Who: Arjun, Rohan, Tara
@@ -753,7 +753,7 @@ Task 93 of 100 (seed 5453)
   Days (firm): only Tuesday, Friday
   Hours (firm): any time
   Wish (optional): none
-Request: 
+Request: Find a two-hour slot for Arjun, Rohan, and Tara on Tuesday or Friday. Either day works.
 
 Task 94 of 100 (seed 5472)
   Who: Arjun, Meera, Nisha
@@ -761,7 +761,7 @@ Task 94 of 100 (seed 5472)
   Days (firm): only Wednesday, Friday
   Hours (firm): cannot start before 13:00
   Wish (optional): on Friday
-Request: 
+Request: Could you schedule 90 minutes for Arjun, Meera, and Nisha on Wednesday or Friday? The meeting must start at 1 p.m. or later, preferably on Friday.
 
 Task 95 of 100 (seed 5494)
   Who: Arjun, Kabir, Rohan
@@ -769,7 +769,7 @@ Task 95 of 100 (seed 5494)
   Days (firm): not Tuesday, not Wednesday
   Hours (firm): cannot start before 13:00
   Wish (optional): none
-Request: 
+Request: Please set up a 90-minute meeting for Arjun, Kabir, and Rohan. We can meet on any day except Tuesday or Wednesday, but the start time must be 1 p.m. or later.
 
 Task 96 of 100 (seed 5573)
   Who: Arjun, Ravi
@@ -777,7 +777,7 @@ Task 96 of 100 (seed 5573)
   Days (firm): only Wednesday, Thursday
   Hours (firm): any time
   Wish (optional): end by 12:00
-Request: 
+Request: Can you find two hours for Arjun and Ravi on Wednesday or Thursday? It would be great to finish before noon if possible.
 
 Task 97 of 100 (seed 5579)
   Who: Kabir, Rohan, Tara
@@ -785,7 +785,7 @@ Task 97 of 100 (seed 5579)
   Days (firm): not Tuesday, not Friday
   Hours (firm): must end by 12:00
   Wish (optional): none
-Request: 
+Request: Arrange a two-hour meeting for Kabir, Rohan, and Tara on any day except Tuesday or Friday. We need to be finished by noon.
 
 Task 98 of 100 (seed 5583)
   Who: Kabir, Meera, Ravi
@@ -793,7 +793,7 @@ Task 98 of 100 (seed 5583)
   Days (firm): only Monday, Thursday
   Hours (firm): must end by 12:00
   Wish (optional): on Thursday
-Request: 
+Request: Please find a 90-minute slot for Kabir, Meera, and Ravi on Monday or Thursday. We must finish by noon, and Thursday would be best.
 
 Task 99 of 100 (seed 5587)
   Who: Arjun, Meera, Nisha
@@ -801,7 +801,7 @@ Task 99 of 100 (seed 5587)
   Days (firm): only Tuesday, Friday
   Hours (firm): must end by 12:00
   Wish (optional): none
-Request: 
+Request: Could you book two hours for Arjun, Meera, and Nisha on Tuesday or Friday? The meeting has to end by noon.
 
 Task 100 of 100 (seed 5588)
   Who: Divya, Nisha, Rohan
@@ -809,4 +809,4 @@ Task 100 of 100 (seed 5588)
   Days (firm): only Wednesday, Thursday
   Hours (firm): cannot start before 13:00
   Wish (optional): none
-Request: 
+Request: Please coordinate a two-hour session for Divya, Nisha, and Rohan on Wednesday or Thursday. It must start at 1 p.m. or later.
