@@ -21,6 +21,9 @@ venv/
 Thumbs.db
 .DS_Store
 
+# Portable Ollama and its model files
+/ollama/
+
 # Local run outputs
 runs/
 *.log

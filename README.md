@@ -14,8 +14,18 @@ solver tool.
 Work in progress. The calendar world is being built first; there are no model
 results yet.
 
-## Running the tests
+## Running
+
+Everything runs inside the project's own virtual environment, `.venv`. On
+Windows, `start.bat` creates it the first time and installs the packages listed
+in `pyproject.toml`. It needs Python 3.12 or newer.
 
 ```
-python -m pytest
+start.bat
 ```
+
+On its own, `start.bat` runs the tests. Anything written after it is passed to
+the environment's Python, for example `start.bat -m pytest -q`.
+
+To rebuild the environment, delete the `.venv` folder and run `start.bat`
+again.
