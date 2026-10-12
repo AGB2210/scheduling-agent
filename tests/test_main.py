@@ -119,6 +119,21 @@ def test_worksheet_check_and_a_test_run_work_together(
     assert records[0]["request"].startswith("Please find a time for ")
 
 
+def test_compare_sets_two_runs_side_by_side(client, monkeypatch, tmp_path, capsys):
+    monkeypatch.setattr(cli, "local_model", always_gives_up)
+    plain, solver = tmp_path / "plain.jsonl", tmp_path / "solver.jsonl"
+    cli.main(["run", "--model", "m", "--out", str(plain), "--limit", "4"])
+    cli.main(
+        ["run", "--model", "m", "--out", str(solver), "--limit", "4", "--agent", "solver"]
+    )
+    capsys.readouterr()
+    cli.main(["compare", str(plain), str(solver)])
+    text = capsys.readouterr().out
+    assert "The difference is solver minus plain, task by task." in text
+    assert "possible tasks (4):" in text
+    assert "difference   +0 points  (+0 to +0)" in text
+
+
 def test_a_command_is_required():
     with pytest.raises(SystemExit):
         cli.main([])

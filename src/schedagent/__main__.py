@@ -6,6 +6,7 @@ from pathlib import Path
 from schedagent.generator import Task, make_task
 from schedagent.local_model import local_model, model_options
 from schedagent.report import (
+    format_comparison,
     format_searches,
     format_summary,
     summarise,
@@ -52,6 +53,12 @@ def main(argv: list[str] | None = None) -> None:
     report = commands.add_parser("report", help="count what happened in a saved run")
     report.add_argument("run", type=Path)
 
+    compare = commands.add_parser(
+        "compare", help="set two runs on the same tasks side by side"
+    )
+    compare.add_argument("first", type=Path)
+    compare.add_argument("second", type=Path)
+
     commands.add_parser(
         "worksheet", help="create the empty worksheet for writing test requests"
     )
@@ -69,6 +76,19 @@ def main(argv: list[str] | None = None) -> None:
         if searches["tasks"]:
             print()
             print(format_searches(searches))
+    elif args.command == "compare":
+        (first_header, first), (second_header, second) = (
+            load_run(args.first),
+            load_run(args.second),
+        )
+        print(
+            format_comparison(
+                first_header.get("agent", "first"),
+                first,
+                second_header.get("agent", "second"),
+                second,
+            )
+        )
     elif args.command == "worksheet":
         write_worksheet(WORKSHEET, held_out_seeds())
         print(f"Created {WORKSHEET}. Write a request under each task.")

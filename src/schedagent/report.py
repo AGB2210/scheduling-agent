@@ -4,6 +4,7 @@ from collections import Counter
 from statistics import mean, median
 
 from schedagent.generator import make_task
+from schedagent.stats import correct_rate, paired_difference
 from schedagent.translation import FIELDS, compare, last_search
 
 KINDS = ["correct", "bad_booking", "gave_up_wrongly", "no_answer"]
@@ -41,6 +42,40 @@ def summarise(records: list[dict]) -> dict:
 
 def _rule(problem: str) -> str:
     return "someone is busy" if problem.endswith(" is busy") else problem
+
+
+def format_comparison(
+    first_name: str, first: list[dict], second_name: str, second: list[dict]
+) -> str:
+    """Two runs on the same tasks, side by side, with 95% confidence intervals."""
+    lines = [
+        "Share of tasks correct, with 95% confidence intervals.",
+        f"The difference is {second_name} minus {first_name}, task by task.",
+    ]
+    for group, possible in (("possible", True), ("impossible", False)):
+        one = [record for record in first if record["possible"] == possible]
+        two = [record for record in second if record["possible"] == possible]
+        if not one:
+            continue
+        lines += [
+            "",
+            f"{group} tasks ({len(one)}):",
+            f"  {first_name:10} {_percent(*correct_rate(one))}",
+            f"  {second_name:10} {_percent(*correct_rate(two))}",
+            f"  {'difference':10} {_points(*paired_difference(one, two))}",
+        ]
+    return "\n".join(lines)
+
+
+def _percent(rate: float, interval: tuple[float, float]) -> str:
+    return f"{rate:4.0%}  ({interval[0]:.0%} to {interval[1]:.0%})"
+
+
+def _points(gain: float, interval: tuple[float, float]) -> str:
+    return (
+        f"{gain * 100:+4.0f} points  "
+        f"({interval[0] * 100:+.0f} to {interval[1] * 100:+.0f})"
+    )
 
 
 def summarise_searches(records: list[dict]) -> dict:

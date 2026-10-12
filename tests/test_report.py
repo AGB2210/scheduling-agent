@@ -1,4 +1,4 @@
-from schedagent.report import format_summary, summarise
+from schedagent.report import format_comparison, format_summary, summarise
 
 
 def record(grade, possible=True, problems=(), kept=None, steps=(), calls=2, seconds=1.0):
@@ -78,3 +78,27 @@ def test_format_summary_shows_the_main_numbers():
     assert "someone is busy      2" in text
     assert "Preference kept: 1 of 2" in text
     assert "Tool calls: 5, of which 1 came back as an error" in text
+
+
+def graded(seed, grade, possible=True):
+    return {"seed": seed, "grade": grade, "possible": possible}
+
+
+def test_format_comparison_shows_each_run_and_the_difference_per_group():
+    plain = [graded(n, "bad_booking") for n in range(8)]
+    plain += [graded(8, "correct"), graded(9, "correct")]
+    plain += [graded(n, "bad_booking", possible=False) for n in range(10, 14)]
+    solver = [graded(n, "correct") for n in range(10)]
+    solver += [graded(10, "correct", possible=False)]
+    solver += [graded(n, "bad_booking", possible=False) for n in range(11, 14)]
+
+    text = format_comparison("plain", plain, "solver", solver)
+    assert "The difference is solver minus plain, task by task." in text
+    possible, impossible = text.split("impossible tasks (4):")
+    assert "possible tasks (10):" in possible
+    assert "plain       20%" in possible
+    assert "solver     100%  (100% to 100%)" in possible
+    assert "difference  +80 points" in possible
+    assert "plain        0%  (0% to 0%)" in impossible
+    assert "solver      25%" in impossible
+    assert "difference  +25 points" in impossible
