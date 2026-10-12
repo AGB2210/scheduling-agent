@@ -9,12 +9,28 @@ books a slot. The project measures how often the booking follows every hard
 rule, and compares an agent that reasons alone against one that can call a
 solver tool.
 
-## Status
+## Results
 
-Work in progress. The agent runs on a local model and is being improved on a
-practice set. There are no final results yet: the numbers so far come from the
-practice set, which the agent has been tuned on. They are recorded, with the
-changes that did not help, in [docs/experiments.md](docs/experiments.md).
+Two versions of the agent were run once each on a test set of 100 tasks that
+neither was tuned on. The plain agent reads the calendars and works out a time
+itself. The solver agent states the request's rules to a tool that runs a
+solver. Both use the same small model, `qwen2.5:3b`.
+
+Share of tasks correct, with 95% confidence intervals:
+
+| Tasks | Plain agent | Solver agent | Difference |
+|---|---|---|---|
+| A valid time exists (80) | 5% (1% to 10%) | 94% (88% to 99%) | +89 points (+81 to +95) |
+| No valid time exists (20) | 0% | 30% (10% to 50%) | +30 points (+10 to +50) |
+
+Handing the time arithmetic to a solver is what made the agent work. It still
+rarely recognises a request that cannot be met, and books something instead of
+giving up.
+
+- [docs/results.md](docs/results.md) has the full results, the error analysis
+  and the limits of what these numbers show.
+- [docs/experiments.md](docs/experiments.md) records how the agent was built up
+  on a practice set, including the changes that did not help.
 
 ## Running
 
