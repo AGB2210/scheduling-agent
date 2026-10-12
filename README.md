@@ -49,3 +49,20 @@ folder is not part of the repository.
 The project starts this copy of Ollama when it needs the model and stops it
 afterwards. It listens on port 11435, not Ollama's usual port, so it does not
 get mixed up with any other copy on the machine.
+
+`qwen2.5:3b` is released under the Qwen Research License, which does not allow
+commercial use.
+
+## Running the model on the practice tasks
+
+The practice set is 100 generated tasks: 80 that have a valid slot and 20 that
+have none. It is for finding and fixing mistakes, not for reporting results.
+
+```
+start.bat -m schedagent run --model qwen2.5:3b --out runs\practice.jsonl
+start.bat -m schedagent report runs\practice.jsonl
+```
+
+`run` saves one line per task, with every tool call the model made. If it is
+interrupted, running the same command again carries on where it stopped.
+`report` counts the outcomes.

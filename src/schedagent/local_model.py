@@ -1,11 +1,25 @@
 """A real model, run locally through Ollama."""
 
-from ollama import Client
+from ollama import Client, ResponseError
 
 from schedagent.agent import LLM, Reply, ToolCall
 from schedagent.tools import TOOLS
 
 CONTEXT_TOKENS = 8192
+MAX_REPLY_TOKENS = 512
+
+
+def model_options(seed: int = 0) -> dict:
+    """The settings sent to the model with every request."""
+    return {
+        # Temperature 0 and a fixed seed make a run repeatable.
+        "temperature": 0,
+        "seed": seed,
+        "num_ctx": CONTEXT_TOKENS,
+        # A tool call needs well under 100 tokens. Without a limit, the model
+        # sometimes kept writing one reply for minutes without ever stopping.
+        "num_predict": MAX_REPLY_TOKENS,
+    }
 
 
 def tool_schemas() -> list[dict]:
@@ -27,13 +41,18 @@ def local_model(client: Client, model: str, seed: int = 0) -> LLM:
     """Wrap an Ollama model as the kind of function the agent loop calls."""
 
     def llm(messages: list[dict]) -> Reply:
-        response = client.chat(
-            model=model,
-            messages=[_to_ollama(message) for message in messages],
-            tools=tool_schemas(),
-            # Temperature 0 and a fixed seed make a run repeatable.
-            options={"temperature": 0, "seed": seed, "num_ctx": CONTEXT_TOKENS},
-        )
+        try:
+            response = client.chat(
+                model=model,
+                messages=[_to_ollama(message) for message in messages],
+                tools=tool_schemas(),
+                options=model_options(seed),
+            )
+        except ResponseError as error:
+            # Ollama could not use what the model wrote, such as a tool call
+            # that is not valid JSON. That is the model's mistake, so it counts
+            # as a turn with no tool call instead of stopping the whole run.
+            return Reply(text=f"[model error: {error.error}]")
         message = response.message
         calls = tuple(
             ToolCall(name=call.function.name, args=dict(call.function.arguments))

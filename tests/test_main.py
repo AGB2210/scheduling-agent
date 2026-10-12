@@ -4,6 +4,9 @@ from types import SimpleNamespace
 import pytest
 
 import schedagent.__main__ as cli
+from schedagent.agent import Reply, ToolCall
+from schedagent.runner import load_run
+from schedagent.sets import practice_seeds
 
 
 class FakeClient:
@@ -18,7 +21,8 @@ class FakeClient:
         return SimpleNamespace(models=models)
 
 
-def test_pull_downloads_the_named_model(monkeypatch, capsys):
+@pytest.fixture
+def client(monkeypatch):
     client = FakeClient()
 
     @contextmanager
@@ -26,9 +30,34 @@ def test_pull_downloads_the_named_model(monkeypatch, capsys):
         yield client
 
     monkeypatch.setattr(cli, "running_ollama", fake_ollama)
+    return client
+
+
+def test_pull_downloads_the_named_model(client, capsys):
     cli.main(["pull", "some-model"])
     assert client.pulled == ["some-model"]
     assert "some-model: 1.93 GB" in capsys.readouterr().out
+
+
+def test_run_saves_the_first_practice_tasks_and_report_counts_them(
+    client, monkeypatch, tmp_path, capsys
+):
+    def always_gives_up(client, model):
+        return lambda messages: Reply(calls=(ToolCall("give_up", {"reason": "none"}),))
+
+    monkeypatch.setattr(cli, "local_model", always_gives_up)
+    out = tmp_path / "run.jsonl"
+    cli.main(["run", "--model", "some-model", "--out", str(out), "--limit", "3"])
+
+    header, records = load_run(out)
+    assert header["model"] == "some-model"
+    assert [record["seed"] for record in records] == practice_seeds()[:3]
+    assert "Ran 3 tasks." in capsys.readouterr().out
+
+    cli.main(["report", str(out)])
+    report = capsys.readouterr().out
+    assert "Model: some-model" in report
+    assert "gave_up_wrongly" in report
 
 
 def test_a_command_is_required():

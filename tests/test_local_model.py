@@ -1,7 +1,13 @@
-from ollama import ChatResponse, Message
+from ollama import ChatResponse, Message, ResponseError
 
 from schedagent.agent import Reply, ToolCall
-from schedagent.local_model import CONTEXT_TOKENS, local_model, tool_schemas
+from schedagent.local_model import (
+    CONTEXT_TOKENS,
+    MAX_REPLY_TOKENS,
+    local_model,
+    model_options,
+    tool_schemas,
+)
 
 
 class FakeClient:
@@ -45,16 +51,30 @@ def test_plain_text_from_the_model_becomes_a_reply_with_no_calls():
     assert reply == Reply(text="Tuesday looks good.")
 
 
+def test_output_ollama_cannot_use_counts_as_a_turn_with_no_tool_call():
+    class BrokenClient:
+        def chat(self, **request):
+            raise ResponseError("error parsing tool call", 500)
+
+    reply = local_model(BrokenClient(), "some-model")([{"role": "user", "content": "hi"}])
+    assert reply == Reply(text="[model error: error parsing tool call]")
+
+
 def test_request_names_the_model_the_tools_and_repeatable_settings():
     client = FakeClient(Message(role="assistant", content="ok"))
     local_model(client, "some-model", seed=7)([{"role": "user", "content": "hi"}])
     request = client.requests[0]
     assert request["model"] == "some-model"
     assert request["tools"] == tool_schemas()
-    assert request["options"] == {
+    assert request["options"] == model_options(seed=7)
+
+
+def test_options_make_a_run_repeatable_and_limit_each_reply():
+    assert model_options(seed=7) == {
         "temperature": 0,
         "seed": 7,
         "num_ctx": CONTEXT_TOKENS,
+        "num_predict": MAX_REPLY_TOKENS,
     }
 
 
