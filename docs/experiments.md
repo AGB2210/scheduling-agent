@@ -251,3 +251,65 @@ The test set is 100 new tasks (80 possible, 20 impossible) from seeds that were
 never used for practice. Their requests were written by the author, from a worksheet
 that lists each task's rules as plain facts. Each agent is run on the test set
 once, and that result is reported whatever it is.
+
+## A second round, after the test
+
+The test showed what the practice runs had already suggested: the solver agent
+works on tasks that have a valid time and rarely gives up on tasks that have
+none. Tuning was started again to work on that.
+
+- The plain and solver agents stay exactly as they were tested, so their
+  results can be reproduced. The changes go into a third version, `solver2`.
+- Every change is tried on the practice set only.
+- The first test set has been used and its failures have been read, so it
+  cannot measure `solver2` fairly. It will not be run again. A new test set is
+  needed before any result for `solver2` is reported.
+
+The 12 tasks that run 07 got wrong were read one by one first:
+
+| What the agent did | Tasks |
+|---|---|
+| The search found nothing, so it searched again without a firm rule and booked a slot from that | 7 |
+| It booked a time that the search before it had not returned | 3 |
+| It read "nothing after 12:00" as "start at 12:00 or later" | 1 |
+| It searched with the wish included, found nothing, and gave up without searching again | 1 |
+
+## Run 08: `book` only accepts a slot the search found (solver2)
+
+In `solver2`, `book` refuses any time that the last `find_slots` did not find
+for the same attendees. The refusal is an error message the model can read and
+act on. The tool's description says so. The instructions did not change.
+
+| | Run 07 (solver) | Run 08 (solver2) |
+|---|---|---|
+| Possible tasks correct | 78 of 80 | 78 of 80 |
+| Impossible tasks correct | 10 of 20 | 12 of 20 |
+| Bookings of a time the search had not found | 3 | 0 |
+| Bad bookings | 11 | 7 |
+| Tasks that ran out of model calls | 0 | 2 |
+| Searches wrong on days | 3 of 100 | 3 of 100 |
+| Searches wrong on hours | 6 of 100 | 5 of 100 |
+| Tool calls rejected | 4 of 221 | 10 of 231 |
+| Preference kept, where it could be | 33 of 42 | 31 of 42 |
+
+Task by task against run 07, 3 tasks got better and 1 got worse. Taking each
+task as a pair, impossible tasks changed by +10 points (0 to +25) and possible
+tasks by 0 points (-4 to +4).
+
+**Conclusions:**
+
+- The bookings this change was aimed at are gone, and the tool now makes them
+  impossible. Two of the three tasks became correct.
+- The tool refused a booking only twice in the whole run, and both times the
+  model then booked a slot it had been given. The other tasks changed because
+  the tool's description changed, not because a booking was refused.
+- The third task was not fixed. With no slot to book, the model searched again
+  and again until its 12 model calls ran out. It still did not give up.
+- One task that was correct now fails: the model kept adding an argument that
+  `find_slots` does not have. Any change to the wording moves a few tasks.
+- With 20 impossible tasks, a change of 2 tasks is weak evidence. The change
+  was kept because it removes one kind of mistake for certain and nothing
+  measured got worse on possible tasks.
+- All 7 bad bookings left are on impossible tasks. In 6 the search found
+  nothing and the model searched again without a firm rule. In 1 it misread a
+  time limit. Run 08 did nothing about these.

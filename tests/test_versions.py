@@ -1,9 +1,17 @@
 from schedagent.agent import SOLVER_PROMPT, SYSTEM_PROMPT
-from schedagent.versions import PLAIN, SOLVER, VERSIONS
+from schedagent.tools import BOOK, BOOK_FOUND
+from schedagent.versions import PLAIN, SOLVER, SOLVER2, VERSIONS
 
 
-def test_there_are_two_versions_to_compare():
-    assert VERSIONS == {"plain": PLAIN, "solver": SOLVER}
+def test_the_versions_can_be_chosen_by_name():
+    assert VERSIONS == {"plain": PLAIN, "solver": SOLVER, "solver2": SOLVER2}
+
+
+def test_the_second_solver_version_differs_only_in_how_it_books():
+    assert SOLVER.tools["book"] is BOOK
+    assert SOLVER2.tools["book"] is BOOK_FOUND
+    assert {**SOLVER2.tools, "book": BOOK} == SOLVER.tools
+    assert SOLVER2.system_prompt == SOLVER.system_prompt
 
 
 def test_plain_version_reads_calendars_itself():

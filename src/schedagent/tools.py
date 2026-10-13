@@ -76,6 +76,9 @@ class Session:
         self.tools = PLAIN_TOOLS if tools is None else tools
         self.booking: Booking | None = None
         self.gave_up = False
+        # What the last find_slots that worked was asked and what it found:
+        # the attendees, and every block that fits them.
+        self.found: tuple[frozenset[str], list[Block]] | None = None
 
     @property
     def finished(self) -> bool:
@@ -116,6 +119,7 @@ class Session:
         """Hand the rules the model stated to the solver."""
         self._require_known(args.attendees)
         blocks = valid_blocks(rules_from_search(args), self.calendar)
+        self.found = (frozenset(args.attendees), blocks)
         return json.dumps(
             {
                 "count": len(blocks),
@@ -140,6 +144,36 @@ class Session:
         block = Block(day=day, start=start, length=end - start)
         self.booking = Booking(attendees=args.attendees, block=block)
         return "Booked."
+
+    def _book_found(self, args: BookArgs) -> str:
+        """Book, but only a time the last search found for these attendees.
+
+        The model sometimes booked a time no search had returned: after a
+        search that found nothing, or with one slot's start and another's end.
+        """
+        if self.found is None:
+            raise ToolError("call find_slots first, then book a slot it returns")
+        attendees, blocks = self.found
+        if not blocks:
+            raise ToolError(
+                "the last find_slots found no slot, so there is nothing to book. "
+                "If it included a wish, search again without the wish. "
+                "If the firm rules alone find no slot, call give_up"
+            )
+        self._require_known(args.attendees)
+        day = _parse_day(args.day)
+        start, end = _parse_time(args.start), _parse_time(args.end)
+        fits = (
+            end > start
+            and Block(day=day, start=start, length=end - start) in blocks
+            and frozenset(args.attendees) == attendees
+        )
+        if not fits:
+            raise ToolError(
+                "that is not a slot the last find_slots returned. "
+                "Book one of its slots, copying the attendees, day, start and end"
+            )
+        return self._book(args)
 
     def _give_up(self, args: GiveUpArgs) -> str:
         self.gave_up = True
@@ -213,6 +247,12 @@ BOOK = Tool(
     BookArgs,
     Session._book,
 )
+BOOK_FOUND = Tool(
+    "Book one of the slots that find_slots returned, copying its day, start "
+    "and end. Any other time is refused. This ends the task.",
+    BookArgs,
+    Session._book_found,
+)
 GIVE_UP = Tool(
     "Say that no time works for this meeting. This ends the task.",
     GiveUpArgs,
@@ -223,3 +263,5 @@ GIVE_UP = Tool(
 PLAIN_TOOLS = {"get_busy": GET_BUSY, "book": BOOK, "give_up": GIVE_UP}
 # The solver agent states the rules and lets the solver find the times.
 SOLVER_TOOLS = {"find_slots": FIND_SLOTS, "book": BOOK, "give_up": GIVE_UP}
+# The second solver agent can only book a time that its search found.
+SOLVER2_TOOLS = {"find_slots": FIND_SLOTS, "book": BOOK_FOUND, "give_up": GIVE_UP}

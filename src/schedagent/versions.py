@@ -3,7 +3,7 @@
 from dataclasses import dataclass
 
 from schedagent.agent import SOLVER_PROMPT, SYSTEM_PROMPT
-from schedagent.tools import PLAIN_TOOLS, SOLVER_TOOLS, Tool
+from schedagent.tools import PLAIN_TOOLS, SOLVER2_TOOLS, SOLVER_TOOLS, Tool
 
 
 @dataclass(frozen=True)
@@ -19,5 +19,8 @@ class Version:
 PLAIN = Version("plain", PLAIN_TOOLS, SYSTEM_PROMPT)
 # States the rules to find_slots and lets the solver work out the times.
 SOLVER = Version("solver", SOLVER_TOOLS, SOLVER_PROMPT)
+# The solver agent after a second round of tuning. Plain and solver stay as
+# they were when they were tested, so their results can be reproduced.
+SOLVER2 = Version("solver2", SOLVER2_TOOLS, SOLVER_PROMPT)
 
-VERSIONS = {version.name: version for version in (PLAIN, SOLVER)}
+VERSIONS = {version.name: version for version in (PLAIN, SOLVER, SOLVER2)}
