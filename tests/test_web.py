@@ -15,6 +15,8 @@ from schedagent.solver import valid_blocks
 from schedagent.versions import PLAIN, SOLVER
 from schedagent.web import (
     MAX_BODY_BYTES,
+    MAX_NAME_CHARS,
+    MAX_PEOPLE,
     MAX_REQUEST_CHARS,
     WEEKS,
     ScheduleArgs,
@@ -77,6 +79,7 @@ def test_week_view_lists_each_person_and_when_they_are_busy():
         "length": BUSY.length,
     }
     assert view["example"] == make_task(SEED).request
+    assert view["limits"] == {"people": MAX_PEOPLE, "name_chars": MAX_NAME_CHARS}
 
 
 def test_the_page_never_shows_a_practice_or_test_task():
@@ -172,6 +175,83 @@ def test_schedule_args_trim_the_request():
     assert args(request="  Find a time.  ").request == "Find a time."
 
 
+def own(*people, agent="solver"):
+    """Schedule arguments with a calendar made by hand in place of a seed."""
+    return ScheduleArgs(
+        calendar={"people": list(people)}, request="Find a time.", agent=agent
+    )
+
+
+ASHA = {"name": "Asha", "busy": [{"day": 0, "start": 2, "length": 2}]}  # Mon 10:00-11:00
+
+
+def test_a_calendar_made_by_hand_becomes_the_agents_calendar():
+    later = {"day": 3, "start": 0, "length": 1}
+    earlier = {"day": 0, "start": 4, "length": 2}
+    made = own({"name": " Asha ", "busy": [later, earlier]}, {"name": "Vikram"})
+    calendar = made.calendar.to_calendar()
+    assert calendar.people == ["Asha", "Vikram"]
+    assert [block.day for block in calendar.busy("Asha")] == [0, 3]
+    assert calendar.busy("Vikram") == []
+
+
+def test_schedule_uses_a_calendar_made_by_hand():
+    def book_asha(start, end):
+        return call("book", attendees=["Asha"], day="Monday", start=start, end=end)
+
+    over_busy = schedule(own(ASHA), scripted(book_asha("10:30", "11:30")))
+    assert over_busy["booking"]["busy"] == ["Asha"]
+
+    # A meeting may start the moment a busy time ends.
+    after = schedule(own(ASHA), scripted(book_asha("11:00", "12:00")))
+    assert after["booking"] == {
+        "day": 0,
+        "start": 4,
+        "length": 2,
+        "attendees": ["Asha"],
+        "busy": [],
+    }
+
+    # Only the people in that calendar exist.
+    look = scripted(call("get_busy", person=PERSON))
+    unknown = schedule(own(ASHA, agent="plain"), look, max_turns=1)
+    assert unknown["events"][0]["result"] == f"Error: unknown person: {PERSON}"
+
+
+@pytest.mark.parametrize(
+    "people",
+    [
+        [],
+        [{"name": f"Person {'abcdefghi'[n]}"} for n in range(MAX_PEOPLE + 1)],
+        [{"name": "Asha"}, {"name": "asha"}],
+        [{"name": ""}],
+        [{"name": "A" * (MAX_NAME_CHARS + 1)}],
+        [{"name": "R2D2"}],
+        [{"name": '"; drop'}],
+        [{"name": "Asha", "busy": [{"day": 5, "start": 0, "length": 1}]}],
+        [{"name": "Asha", "busy": [{"day": 0, "start": 15, "length": 2}]}],
+        [{"name": "Asha", "title": "extra"}],
+    ],
+)
+def test_a_calendar_made_by_hand_is_checked(people):
+    with pytest.raises(ValidationError):
+        own(*people)
+
+
+def test_names_may_use_any_alphabet_and_a_few_marks():
+    made = own({"name": "Zoë"}, {"name": "Anne-Marie O'Neil"}, {"name": "मीरा"})
+    assert made.calendar.to_calendar().people == sorted(
+        ["Zoë", "Anne-Marie O'Neil", "मीरा"]
+    )
+
+
+def test_schedule_args_need_a_seed_or_a_calendar_but_not_both():
+    with pytest.raises(ValidationError, match="either seed or calendar"):
+        ScheduleArgs(request="Find a time.")
+    with pytest.raises(ValidationError, match="either seed or calendar"):
+        ScheduleArgs(seed=SEED, calendar={"people": [ASHA]}, request="Find a time.")
+
+
 @pytest.fixture
 def site():
     """The address of a running server whose model books a free time."""
@@ -231,6 +311,21 @@ def test_site_runs_the_agent_on_a_posted_request(site):
     assert status == 200
     assert result["outcome"] == "booked"
     assert result["booking"]["attendees"] == [PERSON]
+
+
+def test_site_runs_the_agent_on_a_calendar_made_by_hand(site):
+    # The fake model books PERSON at a time that is free in the generated week.
+    calendar = {"people": [{"name": PERSON, "busy": [FREE.model_dump()]}]}
+    body = json.dumps({"calendar": calendar, "request": "Find a time."}).encode()
+    status, result = post(site + "/api/schedule", body)
+    assert status == 200
+    assert result["booking"]["busy"] == [PERSON]
+
+    both = json.dumps({"seed": SEED, "calendar": calendar, "request": "x"}).encode()
+    assert error_of(post, site + "/api/schedule", both) == (
+        400,
+        "Value error, give either seed or calendar, not both",
+    )
 
 
 def test_site_refuses_a_request_it_cannot_use(site):

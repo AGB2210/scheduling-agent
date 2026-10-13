@@ -90,6 +90,11 @@ it and press Schedule. The page then shows each tool call the agent made, what
 came back, and the time it booked, drawn on the calendars. Either agent can be
 chosen.
 
+"My calendar" swaps the generated week for one made by hand. Add people by
+name, drag across a person's row to mark when they are busy, and click a busy
+time to remove it. The calendar is kept in the browser, so it is still there
+after a reload.
+
 A typed request has no list of rules to grade it against, so the page checks
 one thing only: whether anyone booked is busy at that time. The weeks it shows
 are in neither the practice set nor the test set.

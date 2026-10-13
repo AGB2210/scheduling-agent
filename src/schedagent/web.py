@@ -17,11 +17,13 @@ from pydantic import (
     StringConstraints,
     ValidationError,
     field_validator,
+    model_validator,
 )
 
 from schedagent.agent import LLM, Trace, run_agent
+from schedagent.calendar import Calendar
 from schedagent.generator import make_task
-from schedagent.slots import DAY_NAMES, SLOTS_PER_DAY, Block, slot_to_time
+from schedagent.slots import DAY_NAMES, DAYS, SLOTS_PER_DAY, Block, slot_to_time
 from schedagent.tools import Session
 from schedagent.versions import VERSIONS, Version
 
@@ -31,14 +33,57 @@ ADDRESS = "127.0.0.1"  # reachable from this computer only
 # 1000, so nothing tried on the page is ever one of their tasks.
 WEEKS = 1000
 MAX_REQUEST_CHARS = 500
-MAX_BODY_BYTES = 10_000
+MAX_PEOPLE = 8
+MAX_NAME_CHARS = 20
+MAX_BODY_BYTES = 50_000
 
 
 class WeekArgs(BaseModel, extra="forbid"):
     seed: int = Field(ge=0, lt=WEEKS)
 
 
-class ScheduleArgs(WeekArgs):
+class PersonArgs(BaseModel, extra="forbid"):
+    # A name is letters, with spaces, dots, hyphens or apostrophes inside it.
+    # \p{L} is a letter in any alphabet. \p{M} is a mark joined to a letter,
+    # which is how many scripts write their vowels.
+    name: Annotated[
+        str,
+        StringConstraints(
+            strip_whitespace=True,
+            max_length=MAX_NAME_CHARS,
+            pattern=r"^\p{L}[\p{L}\p{M} .'-]*$",
+        ),
+    ]
+    # The week has 80 slots, so nobody can have more busy blocks than that.
+    busy: list[Block] = Field(default=[], max_length=len(DAYS) * SLOTS_PER_DAY)
+
+
+class CalendarArgs(BaseModel, extra="forbid"):
+    """A calendar made by hand on the page."""
+
+    people: list[PersonArgs] = Field(min_length=1, max_length=MAX_PEOPLE)
+
+    @model_validator(mode="after")
+    def _names_differ(self):
+        names = [person.name.casefold() for person in self.people]
+        if len(set(names)) < len(names):
+            raise ValueError("two people have the same name")
+        return self
+
+    def to_calendar(self) -> Calendar:
+        return Calendar(
+            {
+                person.name: sorted(person.busy, key=lambda b: (b.day, b.start))
+                for person in self.people
+            }
+        )
+
+
+class ScheduleArgs(BaseModel, extra="forbid"):
+    # The calendars to use: a generated week, named by its seed, or a
+    # calendar made on the page.
+    seed: int | None = Field(default=None, ge=0, lt=WEEKS)
+    calendar: CalendarArgs | None = None
     request: Annotated[
         str,
         StringConstraints(
@@ -53,6 +98,12 @@ class ScheduleArgs(WeekArgs):
         if name not in VERSIONS:
             raise ValueError(f"must be one of {', '.join(sorted(VERSIONS))}")
         return name
+
+    @model_validator(mode="after")
+    def _one_calendar(self):
+        if (self.seed is None) == (self.calendar is None):
+            raise ValueError("give either seed or calendar, not both")
+        return self
 
 
 def week_view(seed: int) -> dict:
@@ -71,6 +122,8 @@ def week_view(seed: int) -> dict:
             for person in task.calendar.people
         ],
         "example": task.request,
+        # How large a calendar made on the page may be.
+        "limits": {"people": MAX_PEOPLE, "name_chars": MAX_NAME_CHARS},
     }
 
 
@@ -79,7 +132,11 @@ def schedule(
 ) -> dict:
     """Run the agent on one typed request and describe what it did."""
     version = VERSIONS[args.agent]
-    session = Session(make_task(args.seed).calendar, version.tools)
+    if args.calendar is not None:
+        calendar = args.calendar.to_calendar()
+    else:
+        calendar = make_task(args.seed).calendar
+    session = Session(calendar, version.tools)
     started = time.perf_counter()
     trace = run_agent(
         args.request,
@@ -147,8 +204,13 @@ def _events(trace: Trace) -> list[dict]:
 
 
 def _problems(error: ValidationError) -> str:
+    """Each problem as 'where: what', or just 'what' when it has no one place."""
     return "; ".join(
-        f"{'.'.join(str(part) for part in problem['loc'])}: {problem['msg']}"
+        ": ".join(
+            part
+            for part in (".".join(str(p) for p in problem["loc"]), problem["msg"])
+            if part
+        )
         for problem in error.errors()
     )
 
