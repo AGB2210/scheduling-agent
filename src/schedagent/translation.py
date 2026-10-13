@@ -3,20 +3,38 @@
 from pydantic import ValidationError
 
 from schedagent.rules import MeetingRules
-from schedagent.tools import FindSlotsArgs, ToolError, rules_from_search
+from schedagent.tools import FindSlotsWishArgs, ToolError, rules_from_search
 
 FIELDS = ["attendees", "length", "days", "hours"]
 
 
 def last_search(record: dict) -> MeetingRules | None:
-    """The rules in the last find_slots call the tool accepted, if any."""
+    """The rules in the last find_slots call the tool accepted, if any.
+
+    A wish stated apart from the firm rules comes back as the rules' `prefer`.
+    """
     for step in reversed(record["steps"]):
         if step["tool"] == "find_slots" and not step["result"].startswith("Error:"):
             try:
-                return rules_from_search(FindSlotsArgs.model_validate(step["args"]))
+                # This reads both agents' searches: the second solver agent's
+                # arguments are the first one's plus the wishes.
+                args = FindSlotsWishArgs.model_validate(step["args"])
+                return rules_from_search(args)
             except (ValidationError, ToolError):
                 return None
     return None
+
+
+def compare_wish(searched: MeetingRules, true: MeetingRules) -> str:
+    """Judge the wish in a search: exact, missing, or wrong.
+
+    Exact also covers a task with no wish searched with none. Missing means
+    the task has a wish and the search states none. Wrong is anything else: a
+    different wish, or a wish where the task has none.
+    """
+    if searched.prefer == true.prefer:
+        return "exact"
+    return "missing" if searched.prefer is None else "wrong"
 
 
 def compare(searched: MeetingRules, true: MeetingRules) -> dict[str, str]:

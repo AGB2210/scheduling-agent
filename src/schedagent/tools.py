@@ -17,7 +17,7 @@ from schedagent.slots import (
     slot_to_time,
     time_to_slot,
 )
-from schedagent.solver import valid_blocks
+from schedagent.solver import preferred_blocks, valid_blocks
 
 MAX_SLOTS_SHOWN = 10
 
@@ -54,6 +54,31 @@ class FindSlotsArgs(BaseModel, extra="forbid"):
     )
     latest_end: str = Field(
         default="17:00", description="The meeting must be over by this time."
+    )
+
+
+class FindSlotsWishArgs(FindSlotsArgs):
+    """The same search, with room for what the request only wishes for.
+
+    The first solver agent searched with a wish included and then, if that
+    found nothing, searched again without it. In that second search it often
+    left out a firm rule too. Here the wish travels in the same call, and the
+    tool does the falling back.
+    """
+
+    preferred_days: list[str] | None = Field(
+        default=None,
+        description="A wish, not a rule: the days the meeting would ideally be on.",
+    )
+    preferred_earliest_start: str | None = Field(
+        default=None,
+        description="A wish, not a rule: ideally the meeting would not start "
+        "before this time.",
+    )
+    preferred_latest_end: str | None = Field(
+        default=None,
+        description="A wish, not a rule: ideally the meeting would be over by "
+        "this time.",
     )
 
 
@@ -120,19 +145,21 @@ class Session:
         self._require_known(args.attendees)
         blocks = valid_blocks(rules_from_search(args), self.calendar)
         self.found = (frozenset(args.attendees), blocks)
-        return json.dumps(
-            {
-                "count": len(blocks),
-                "slots": [
-                    {
-                        "day": DAY_NAMES[block.day],
-                        "start": slot_to_time(block.start),
-                        "end": slot_to_time(block.end),
-                    }
-                    for block in blocks[:MAX_SLOTS_SHOWN]
-                ],
-            }
-        )
+        return json.dumps({"count": len(blocks), "slots": _shown(blocks)})
+
+    def _find_slots_wish(self, args: FindSlotsWishArgs) -> str:
+        """Search with the firm rules, keeping the wish when some slot allows it."""
+        self._require_known(args.attendees)
+        rules = rules_from_search(args)
+        blocks = valid_blocks(rules, self.calendar)
+        reply = {"count": len(blocks)}
+        if rules.prefer is not None and blocks:
+            wished = preferred_blocks(rules, self.calendar)
+            # Only the slots that keep the wish are offered, when there are any.
+            blocks = wished or blocks
+            reply = {"count": len(blocks), "wish_kept": bool(wished)}
+        self.found = (frozenset(args.attendees), blocks)
+        return json.dumps({**reply, "slots": _shown(blocks)})
 
     def _book(self, args: BookArgs) -> str:
         # Like a real calendar, this does not refuse a clash.
@@ -203,7 +230,41 @@ def rules_from_search(args: FindSlotsArgs) -> MeetingRules:
         attendees=args.attendees,
         length=length,
         must=Window(days=allowed, earliest=earliest, latest=latest),
+        prefer=_wish_from_search(args),
     )
+
+
+def _wish_from_search(args: FindSlotsArgs) -> Window | None:
+    """The wish in a search, if it is the kind of search that can carry one."""
+    if not isinstance(args, FindSlotsWishArgs):
+        return None
+    wish = {}
+    # An empty list of days is taken to mean no wish about days.
+    if args.preferred_days:
+        wish["days"] = {_parse_day(day) for day in args.preferred_days}
+    if args.preferred_earliest_start is not None:
+        wish["earliest"] = _parse_time(args.preferred_earliest_start)
+    if args.preferred_latest_end is not None:
+        wish["latest"] = _parse_time(args.preferred_latest_end)
+    if not wish:
+        return None
+    if wish.get("latest", SLOTS_PER_DAY) <= wish.get("earliest", 0):
+        raise ToolError(
+            "preferred_latest_end must be after preferred_earliest_start"
+        )
+    return Window(**wish)
+
+
+def _shown(blocks: list[Block]) -> list[dict]:
+    """The first few blocks, written the way the model reads them."""
+    return [
+        {
+            "day": DAY_NAMES[block.day],
+            "start": slot_to_time(block.start),
+            "end": slot_to_time(block.end),
+        }
+        for block in blocks[:MAX_SLOTS_SHOWN]
+    ]
 
 
 def _parse_day(text: str) -> int:
@@ -241,6 +302,15 @@ FIND_SLOTS = Tool(
     FindSlotsArgs,
     Session._find_slots,
 )
+FIND_SLOTS_WISH = Tool(
+    "Find the times this week when every attendee is free for a meeting of the "
+    "given length. Takes the firm rules and any wish in one call. When some "
+    "slots keep the wish, only those are returned. When none does, the slots "
+    "that follow the firm rules are returned. Returns how many there are and "
+    f"the first {MAX_SLOTS_SHOWN}.",
+    FindSlotsWishArgs,
+    Session._find_slots_wish,
+)
 BOOK = Tool(
     "Book the meeting. Times look like 14:00 and fall on the hour or half "
     "hour, between 09:00 and 17:00. This ends the task.",
@@ -263,5 +333,10 @@ GIVE_UP = Tool(
 PLAIN_TOOLS = {"get_busy": GET_BUSY, "book": BOOK, "give_up": GIVE_UP}
 # The solver agent states the rules and lets the solver find the times.
 SOLVER_TOOLS = {"find_slots": FIND_SLOTS, "book": BOOK, "give_up": GIVE_UP}
-# The second solver agent can only book a time that its search found.
-SOLVER2_TOOLS = {"find_slots": FIND_SLOTS, "book": BOOK_FOUND, "give_up": GIVE_UP}
+# The second solver agent states wishes in the same search, and can only book
+# a time that the search found.
+SOLVER2_TOOLS = {
+    "find_slots": FIND_SLOTS_WISH,
+    "book": BOOK_FOUND,
+    "give_up": GIVE_UP,
+}

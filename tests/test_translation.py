@@ -1,6 +1,6 @@
 from schedagent.report import format_searches, summarise_searches
 from schedagent.rules import MeetingRules, Window
-from schedagent.translation import compare, last_search
+from schedagent.translation import compare, compare_wish, last_search
 
 MON, TUE, WED, THU, FRI = range(5)
 
@@ -81,6 +81,42 @@ def test_last_search_is_none_when_no_search_was_accepted():
     rejected = step(result="Error: unknown person: Zoya", attendees=["Zoya"])
     assert last_search({"steps": [rejected]}) is None
     assert last_search({"steps": []}) is None
+
+
+def test_a_wish_stated_apart_from_the_rules_is_read_as_the_wish():
+    record = {"steps": [step(excluded_days=["Friday"], latest_end="12:00", preferred_days=["Tuesday"])]}
+    found = last_search(record)
+    assert found.must == TRUE.must
+    assert found.prefer == Window(days={TUE})
+
+
+def test_the_wish_in_a_search_is_exact_missing_or_wrong():
+    tuesday, monday = Window(days={TUE}), Window(days={MON})
+    wants_tuesday = TRUE.model_copy(update={"prefer": tuesday})
+    assert compare_wish(searched(), TRUE) == "exact"  # no wish, none stated
+    assert compare_wish(searched(prefer=tuesday), wants_tuesday) == "exact"
+    assert compare_wish(searched(), wants_tuesday) == "missing"
+    assert compare_wish(searched(prefer=monday), wants_tuesday) == "wrong"
+    assert compare_wish(searched(prefer=monday), TRUE) == "wrong"  # a wish from nowhere
+
+
+def test_summarise_searches_judges_the_wish_only_when_one_was_stated():
+    # Seed 1027: Meera and Kabir, two hours, 13:00 or later, ideally Monday.
+    firm = {"attendees": ["Meera", "Kabir"], "duration_minutes": 120, "earliest_start": "13:00"}
+    stated = step(**firm, preferred_days=["Monday"])
+    left_out = step(**firm)
+    as_a_rule = step(**firm, days=["Monday"])
+
+    without = summarise_searches([{"seed": 1027, "steps": [as_a_rule]}])
+    assert "wish" not in without
+    assert "The wish" not in format_searches(without)
+
+    summary = summarise_searches(
+        [{"seed": 1027, "steps": [stated]}, {"seed": 1027, "steps": [left_out]}]
+    )
+    assert summary["wish"] == {"exact": 1, "missing": 1}
+    assert summary["fields"]["days"] == {"exact": 2}
+    assert "The wish: 1 exact, 1 missing, 0 wrong" in format_searches(summary)
 
 
 def test_summarise_searches_counts_each_rule_across_tasks():

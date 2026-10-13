@@ -5,7 +5,7 @@ from statistics import mean, median
 
 from schedagent.generator import make_task
 from schedagent.stats import correct_rate, paired_difference
-from schedagent.translation import FIELDS, compare, last_search
+from schedagent.translation import FIELDS, compare, compare_wish, last_search
 
 KINDS = ["correct", "bad_booking", "gave_up_wrongly", "no_answer"]
 
@@ -85,6 +85,8 @@ def summarise_searches(records: list[dict]) -> dict:
     with that task's true rules.
     """
     counts = {field: Counter() for field in FIELDS}
+    wishes = Counter()
+    states_wishes = False
     tasks = 0
     for record in records:
         searched = last_search(record)
@@ -94,7 +96,16 @@ def summarise_searches(records: list[dict]) -> dict:
         true_rules = make_task(record["seed"]).rules
         for field, verdict in compare(searched, true_rules).items():
             counts[field][verdict] += 1
-    return {"tasks": tasks, "fields": {field: dict(counts[field]) for field in FIELDS}}
+        wishes[compare_wish(searched, true_rules)] += 1
+        states_wishes = states_wishes or searched.prefer is not None
+    summary = {
+        "tasks": tasks,
+        "fields": {field: dict(counts[field]) for field in FIELDS},
+    }
+    # Only an agent that can state a wish apart from the rules is judged on it.
+    if states_wishes:
+        summary["wish"] = dict(wishes)
+    return summary
 
 
 def format_searches(summary: dict) -> str:
@@ -106,6 +117,12 @@ def format_searches(summary: dict) -> str:
         lines.append(
             f"  {field:10}{counts.get('exact', 0):>7}"
             f"{counts.get('narrower', 0):>10}{counts.get('wrong', 0):>7}"
+        )
+    if "wish" in summary:
+        wish = summary["wish"]
+        lines.append(
+            f"The wish: {wish.get('exact', 0)} exact, "
+            f"{wish.get('missing', 0)} missing, {wish.get('wrong', 0)} wrong"
         )
     return "\n".join(lines)
 

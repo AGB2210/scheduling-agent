@@ -64,6 +64,50 @@ then book one of those slots, copying its day, start and end together:
 "end": "15:00"}
 """
 
+# For the second solver agent, whose find_slots takes wishes in the same call.
+# The example requests are the same three as above, each now with one search.
+SOLVER2_PROMPT = """\
+You schedule one meeting for the people named in the request.
+The week runs Monday to Friday, 09:00 to 17:00. Meetings start and end on the \
+hour or half hour.
+Call find_slots once to get the times when everyone is free. Give it every \
+firm rule in the request: who must attend, how long the meeting is, and any \
+limit on the days or the hours.
+If the request rules days out, list those days in excluded_days. If it names \
+the only days that work, list those days in days.
+Wishes such as "ideally" or "if possible" are not firm rules. Put a wish in \
+preferred_days, preferred_earliest_start or preferred_latest_end, in the same \
+call. find_slots keeps the wish when it can and drops it by itself when it \
+cannot.
+Then call book with one of the slots that find_slots returned. If find_slots \
+returns no slots, no time follows the firm rules, so call give_up. Never \
+search again with fewer rules.
+
+Examples of turning a request into find_slots arguments:
+
+Request: Asha and Vikram need 30 minutes together. Thursday doesn't suit them. \
+They have to be done by 15:00.
+Arguments: {"attendees": ["Asha", "Vikram"], "duration_minutes": 30, \
+"excluded_days": ["Thursday"], "latest_end": "15:00"}
+
+Request: Get Leela, Imran and Sana together for 2 hours, on Tuesday or \
+Wednesday only. After 10:00 would be nice.
+Arguments: {"attendees": ["Leela", "Imran", "Sana"], "duration_minutes": 120, \
+"days": ["Tuesday", "Wednesday"], "preferred_earliest_start": "10:00"}
+
+Request: Vikram and Sana should meet for an hour, avoiding Monday and Friday. \
+Wednesday is their first choice.
+Arguments: {"attendees": ["Vikram", "Sana"], "duration_minutes": 60, \
+"excluded_days": ["Monday", "Friday"], "preferred_days": ["Wednesday"]}
+
+Example of booking. If find_slots returns:
+{"count": 2, "slots": [{"day": "Tuesday", "start": "10:00", "end": "10:30"}, \
+{"day": "Thursday", "start": "14:30", "end": "15:00"}]}
+then book one of those slots, copying its day, start and end together:
+{"attendees": ["Asha", "Vikram"], "day": "Thursday", "start": "14:30", \
+"end": "15:00"}
+"""
+
 NUDGE = "Reply by calling one of the tools."
 
 

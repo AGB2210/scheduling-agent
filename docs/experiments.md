@@ -313,3 +313,51 @@ tasks by 0 points (-4 to +4).
 - All 7 bad bookings left are on impossible tasks. In 6 the search found
   nothing and the model searched again without a firm rule. In 1 it misread a
   time limit. Run 08 did nothing about these.
+
+## Run 09: the wish goes in the same search (solver2)
+
+Until now the agent searched with a wish included and, if that found nothing,
+searched again without it. That second search is where it left out firm rules.
+In run 09 `find_slots` takes the wish in its own arguments (`preferred_days`,
+`preferred_earliest_start`, `preferred_latest_end`) next to the firm rules.
+The tool returns the slots that keep the wish when there are some, and the
+slots that follow the firm rules when there are none. The instructions now say
+to search once, to give up when the search returns nothing, and never to
+search again with fewer rules. The three example requests are the same as
+before, each now shown with one search.
+
+| | Run 08 | Run 09 |
+|---|---|---|
+| Possible tasks correct | 78 of 80 | 79 of 80 |
+| Impossible tasks correct | 12 of 20 | 17 of 20 |
+| Bad bookings | 7 | 4 |
+| Tasks that ran out of model calls | 2 | 0 |
+| Gave up although a valid slot existed | 1 | 0 |
+| Searches wrong on days | 3 of 100 | 0 of 100 |
+| Searches narrower than the rules on days | 16 of 100 | 2 of 100 |
+| Searches wrong on hours | 5 of 100 | 11 of 100 |
+| Tool calls rejected | 10 of 231 | 9 of 212 |
+| Preference kept, where it could be | 31 of 42 | 41 of 43 |
+
+Task by task against run 08, 7 tasks got better and 1 got worse. Taking each
+task as a pair, impossible tasks changed by +25 points (0 to +50) and possible
+tasks by +1 point (0 to +4).
+
+**Conclusions:**
+
+- Impossible tasks went from 12 to 17 of 20. Of the 6 tasks where run 08
+  searched again without a firm rule, 4 are now correct. With one search there
+  is no second search to get wrong.
+- The wish is kept far more often, 41 of 43 against 31 of 42, because the tool
+  now offers only the slots that keep it.
+- The change brought a new mistake. In 11 of the 36 tasks with a firm start
+  time ("It must start at 13:00 or later", "Nothing before 13:00"), the model
+  put that time in `preferred_earliest_start`, as if it were a wish. A firm end
+  time was stated correctly in all 29 tasks that have one.
+- All 4 tasks that failed in run 09 have this mistake. The other 7 tasks with
+  it were still graded correct, because the slot booked happened to be valid.
+- A likely cause, not yet tested: the only example in the instructions that
+  has a start time is a wish ("After 10:00 would be nice"). No example shows a
+  firm start time.
+
+Run 09's setup was kept.
