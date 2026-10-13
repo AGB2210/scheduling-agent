@@ -85,8 +85,9 @@ it, opens a page for typing a request and watching the agent work on it:
 start.bat
 ```
 
-The page shows a generated week of calendars. Type a request for the people in
-it and press Schedule. The page then shows each tool call the agent made, what
+The page shows a generated week of calendars: a block for each day, with a row
+for each person and the hours running from left to right. Type a request for
+the people in it and press Schedule. The page then shows each tool call the agent made, what
 came back, and the time it booked, drawn on the calendars. Either agent can be
 chosen.
 

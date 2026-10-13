@@ -219,14 +219,13 @@ def make_server(
     llm_for: Callable[[Version], LLM], port: int = 8000
 ) -> ThreadingHTTPServer:
     """Build the web server. `llm_for` gives the model for an agent version."""
-    page = PAGE.read_bytes()
     one_at_a_time = threading.Lock()  # the model works on one request at a time
 
     class Handler(BaseHTTPRequestHandler):
         def do_GET(self) -> None:
             url = urlparse(self.path)
             if url.path == "/":
-                self._send(200, page, "text/html; charset=utf-8")
+                self._send(200, PAGE.read_bytes(), "text/html; charset=utf-8")
             elif url.path == "/api/week":
                 self._week(parse_qs(url.query).get("seed"))
             else:

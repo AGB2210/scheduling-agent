@@ -12,12 +12,13 @@
     --ink: #1b1c1e;
     --soft: #666b73;
     --line: #e2e2de;
-    --track: #f0f0ed;
-    --busy: #c5c8cf;
+    --track: #f3f3f0;
+    --busy: #d3d6dc;
     --accent: #2456c9;
     --on-accent: #ffffff;
     --good: #1a7f4b;
     --bad: #c0392b;
+    --on-bad: #ffffff;
   }
   @media (prefers-color-scheme: dark) {
     :root {
@@ -25,13 +26,14 @@
       --card: #1a1c1f;
       --ink: #ececea;
       --soft: #9a9fa7;
-      --line: #2b2e33;
-      --track: #23262a;
-      --busy: #565c66;
+      --line: #2e3136;
+      --track: #212427;
+      --busy: #4a505a;
       --accent: #86a8ff;
       --on-accent: #0f1626;
       --good: #62cc93;
       --bad: #ff8a7a;
+      --on-bad: #2a0f0b;
     }
   }
 
@@ -43,7 +45,6 @@
     color: var(--ink);
     font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   }
-  main { max-width: 60rem; margin: 0 auto; padding: 2.5rem 1rem 4rem; }
   h1 { margin: 0; font-size: 1.5rem; font-weight: 650; letter-spacing: -0.01em; }
   h2 { margin: 0; font-size: 0.95rem; font-weight: 600; }
   h3 { margin: 1.5rem 0 0.5rem; font-size: 0.8rem; font-weight: 600;
@@ -51,8 +52,31 @@
   p { margin: 0; }
   .soft { color: var(--soft); }
   .small { font-size: 0.85rem; }
-  header { margin-bottom: 1.5rem; }
   header p { margin-top: 0.25rem; }
+
+  /* One column on a narrow screen: the calendars, then the request.
+     On a wide screen the request stays in view beside the calendars. */
+  main { max-width: 60rem; margin: 0 auto; padding: 2.5rem 1rem 4rem; }
+  @media (min-width: 72rem) {
+    main {
+      max-width: 88rem;
+      display: grid;
+      grid-template-columns: 25rem minmax(0, 1fr);
+      grid-template-areas: "head head" "side week";
+      column-gap: 1rem;
+      align-items: start;
+    }
+    header { grid-area: head; }
+    #week-card { grid-area: week; }
+    #side {
+      grid-area: side;
+      position: sticky;
+      top: 0;
+      max-height: 100vh;
+      overflow-y: auto;
+      padding-bottom: 1rem;
+    }
+  }
 
   .card {
     background: var(--card);
@@ -61,8 +85,9 @@
     padding: 1.25rem;
     margin-top: 1rem;
   }
-  .row { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
+  .row { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; }
   .spacer { flex: 1; }
+  .under { margin-top: 1rem; }
 
   button, select, textarea, input { font: inherit; color: inherit; }
   button {
@@ -85,6 +110,7 @@
     background: var(--card);
     border-radius: 7px;
     padding: 0.35rem 0.5rem;
+    max-width: 100%;
   }
   textarea {
     display: block;
@@ -103,49 +129,76 @@
   .tabs button { border: 0; border-radius: 0; color: var(--soft); }
   .tabs button[aria-pressed="true"] { background: var(--track); color: var(--ink); font-weight: 600; }
 
-  /* The week: one row for each person, one column for each day. */
-  .scroll { overflow-x: auto; margin-top: 1rem; }
-  .grid {
-    display: grid;
-    grid-template-columns: 6rem repeat(var(--days), minmax(7.5rem, 1fr));
-    gap: 0.4rem 0.6rem;
+  /* The people in a hand-made calendar, each with a button to remove them. */
+  .chip {
+    display: inline-flex;
     align-items: center;
-    min-width: 47rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 0.15rem 0.3rem 0.15rem 0.75rem;
+    font-size: 0.9rem;
   }
-  .day { font-size: 0.85rem; font-weight: 600; }
-  .scale {
-    display: flex;
-    justify-content: space-between;
+  .chip button { border: 0; padding: 0 0.4rem; color: var(--soft); font-size: 1rem; line-height: 1.2; }
+  .chip button:hover { color: var(--bad); }
+  #name { width: 9rem; }
+
+  /* The week. Each day is a block: a line of clock times, then one row for
+     each person, with time running from left to right. */
+  .scroll { overflow-x: auto; }
+  .week { min-width: 38rem; }
+  .day { margin-top: 1.25rem; }
+  .lane {
+    display: grid;
+    grid-template-columns: 5.5rem minmax(0, 1fr);
+    align-items: center;
+    margin-top: 3px;
+  }
+  .day-name { font-size: 0.9rem; font-weight: 600; }
+  .axis {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(var(--hours), 1fr);
     font-size: 0.7rem;
-    font-weight: 400;
     color: var(--soft);
     font-variant-numeric: tabular-nums;
   }
-  .name { display: flex; align-items: center; gap: 0.25rem; font-size: 0.9rem; min-width: 0; }
-  .name span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .remove { border: 0; padding: 0 0.3rem; color: var(--soft); line-height: 1.2; }
-  .remove:hover { color: var(--bad); }
+  .axis span { padding-left: 2px; }
+  .axis .end { position: absolute; right: 0; padding: 0 2px 0 0; }
+  .name { font-size: 0.9rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding-right: 0.5rem; }
   .track {
     display: grid;
     grid-template-columns: repeat(var(--slots), 1fr);
-    height: 1.4rem;
-    border-radius: 4px;
+    height: 1.6rem;
+    border-radius: 5px;
     overflow: hidden;
-    /* A faint line at every hour. */
+    /* A line at every hour. */
     background:
       linear-gradient(to right, var(--line) 1px, transparent 1px)
       0 0 / calc(100% / var(--hours)) 100% var(--track);
   }
-  .bar { grid-row: 1; border: 0; border-radius: 0; padding: 0; }
-  .bar.busy { background: var(--busy); }
-  .bar.booked { background: var(--accent); z-index: 1; }
-  .bar.clash { background: var(--bad); z-index: 1; }
-  .bar.draft { background: var(--accent); opacity: 0.45; pointer-events: none; }
+  .bar {
+    grid-row: 1;
+    min-width: 0;
+    margin: 2px 1px;
+    border: 0;
+    border-radius: 4px;
+    padding: 0 0.35rem;
+    font-size: 0.7rem;
+    line-height: calc(1.6rem - 4px);
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    font-variant-numeric: tabular-nums;
+  }
+  .bar.busy { background: var(--busy); color: var(--ink); }
+  .bar.booked { background: var(--accent); color: var(--on-accent); font-weight: 600; z-index: 1; }
+  .bar.clash { background: var(--bad); color: var(--on-bad); font-weight: 600; z-index: 1; }
+  .bar.draft { background: var(--accent); color: var(--on-accent); opacity: 0.6; pointer-events: none; }
   /* A calendar made by hand: drag to add a busy time, click one to remove it. */
   .editable .track { cursor: crosshair; touch-action: none; user-select: none; }
+  .editable .track:hover { outline: 1px solid var(--soft); outline-offset: -1px; }
   .editable .bar.busy { cursor: pointer; }
-  .editable .bar.busy:hover, .editable .bar.busy:focus-visible { background: var(--bad); }
-  .under { margin-top: 1rem; }
+  .editable .bar.busy:hover, .editable .bar.busy:focus-visible { background: var(--bad); color: var(--on-bad); }
   .legend { display: flex; gap: 1.25rem; flex-wrap: wrap; }
   .key {
     display: inline-block;
@@ -155,6 +208,11 @@
     margin-right: 0.35rem;
     vertical-align: -1px;
   }
+
+  /* The picture of the booked day in the result is small, so it shows fewer words. */
+  #result .day { margin-top: 0.75rem; }
+  #result .bar { font-size: 0; }
+  #result .axis span:nth-child(even) { visibility: hidden; }
 
   .headline { font-size: 1.2rem; font-weight: 600; margin-top: 0.5rem; }
   .good { color: var(--good); }
@@ -178,58 +236,59 @@
       running on this computer reads it and books a time.</p>
   </header>
 
-  <section class="card" aria-labelledby="week-title">
+  <section class="card" id="week-card" aria-labelledby="week-title">
     <div class="row">
       <h2 id="week-title">Calendars</h2>
       <span class="spacer"></span>
+      <button id="another" type="button">Another week</button>
       <div class="tabs" role="group" aria-label="Which calendars to use">
         <button id="show-generated" type="button" aria-pressed="true">Generated week</button>
         <button id="show-custom" type="button" aria-pressed="false">My calendar</button>
       </div>
     </div>
-    <div class="scroll"><div id="grid" class="grid"></div></div>
-    <p id="empty" class="under soft" hidden>Nobody is here yet. Add the people first.</p>
-
-    <div class="row under">
-      <p class="legend small soft">
-        <span><span class="key" style="background: var(--busy)"></span>Busy</span>
-        <span><span class="key" style="background: var(--accent)"></span>Booked</span>
-        <span><span class="key" style="background: var(--bad)"></span>Booked over a busy time</span>
-      </p>
-      <span class="spacer"></span>
-      <button id="another" type="button">Another week</button>
-    </div>
 
     <div id="custom-tools" hidden>
       <form id="add-person" class="row under">
+        <span id="chips" class="row"></span>
         <input id="name" placeholder="Name" aria-label="Name of the person to add" autocomplete="off">
         <button type="submit">Add person</button>
-        <span id="name-problem" class="small bad" role="alert"></span>
         <span class="spacer"></span>
         <button id="clear" type="button">Start fresh</button>
       </form>
-      <p class="under small soft">Drag across a person's row to mark when they are busy.
+      <p id="name-problem" class="small bad" role="alert"></p>
+      <p id="hint" class="under small soft">Drag across a person's row to mark when they are busy.
         Click a busy time to remove it.</p>
     </div>
+
+    <p id="empty" class="under soft" hidden>Nobody is here yet. Add the people first.</p>
+    <div class="scroll"><div id="week" class="week"></div></div>
+
+    <p class="legend under small soft">
+      <span><span class="key" style="background: var(--busy)"></span>Busy</span>
+      <span><span class="key" style="background: var(--accent)"></span>Booked</span>
+      <span><span class="key" style="background: var(--bad)"></span>Booked over a busy time</span>
+    </p>
   </section>
 
-  <section class="card">
-    <h2><label for="request">Request</label></h2>
-    <textarea id="request" rows="3" maxlength="500"></textarea>
-    <div class="row">
-      <label class="small soft">Agent
-        <select id="agent">
-          <option value="solver">Solver: hands the rules to a solver</option>
-          <option value="plain">Plain: reads the calendars itself</option>
-        </select>
-      </label>
-      <span class="spacer"></span>
-      <button id="example" type="button">Use an example</button>
-      <button id="go" type="button" class="primary">Schedule</button>
-    </div>
-  </section>
+  <div id="side">
+    <section class="card">
+      <h2><label for="request">Request</label></h2>
+      <textarea id="request" rows="4" maxlength="500"></textarea>
+      <div class="row">
+        <label class="small soft">Agent
+          <select id="agent">
+            <option value="solver">Solver: hands the rules to a solver</option>
+            <option value="plain">Plain: reads the calendars itself</option>
+          </select>
+        </label>
+        <span class="spacer"></span>
+        <button id="example" type="button">Use an example</button>
+        <button id="go" type="button" class="primary">Schedule</button>
+      </div>
+    </section>
 
-  <section class="card" id="result" aria-live="polite" hidden></section>
+    <section class="card" id="result" aria-live="polite" hidden></section>
+  </div>
 </main>
 
 <script>
@@ -288,83 +347,100 @@ function saveCustom() {
   } catch {}
 }
 
-// "10:00 to 11:00" for a block of slots.
-function hours(block) {
-  return `${grid.times[block.start]} to ${grid.times[block.start + block.length]}`;
+// The clock times of a block: "10:00 to 11:00" in a sentence, "10:00–11:00" on a bar.
+function hours(block, joiner = " to ") {
+  return grid.times[block.start] + joiner + grid.times[block.start + block.length];
 }
 
-// One coloured stretch on a person's day.
+// One coloured stretch on a person's day. Its times are written on it when they fit.
 function bar(tag, kind, block, label) {
   const node = el(tag, `bar ${kind}`);
-  node.style.gridColumn = `${block.start + 1} / span ${block.length}`;
+  place(node, block);
   node.title = label;
   return node;
 }
 
-// Draw every person's week, with the booking on top if there is one.
-function drawWeek(booking) {
+function place(node, block) {
+  node.style.gridColumn = `${block.start + 1} / span ${block.length}`;
+  node.textContent = block.length >= 2 ? hours(block, "–") : "";
+}
+
+// One day: a line of clock times, then a row for each person.
+function dayBlock(day, persons, booking, editable) {
   const slots = grid.times.length - 1;
-  const editable = mode === "custom";
-  const box = $("grid");
-  box.classList.toggle("editable", editable);
-  box.style.setProperty("--days", grid.days.length);
-  box.style.setProperty("--slots", slots);
-  box.style.setProperty("--hours", slots / 2);
-  box.replaceChildren(el("div"));
-  for (const day of grid.days) {
-    const head = el("div", "day", day);
-    const scale = el("div", "scale");
-    for (const slot of [0, slots / 2, slots]) scale.append(el("span", "", grid.times[slot]));
-    head.append(scale);
-    box.append(head);
-  }
-  for (const person of people()) {
-    const name = el("div", "name");
-    name.append(el("span", "", person.name));
-    if (editable) {
-      const remove = el("button", "remove", "×");
-      remove.type = "button";
-      remove.title = `Remove ${person.name}`;
-      remove.setAttribute("aria-label", remove.title);
-      remove.addEventListener("click", () => {
-        custom.people = custom.people.filter((other) => other !== person);
+  const dayName = grid.days[day];
+  const section = el("section", "day");
+
+  const head = el("div", "lane");
+  const axis = el("div", "axis");
+  for (let slot = 0; slot < slots; slot += 2) axis.append(el("span", "", grid.times[slot]));
+  axis.append(el("span", "end", grid.times[slots]));
+  head.append(el("div", "day-name", dayName), axis);
+  section.append(head);
+
+  for (const person of persons) {
+    const track = el("div", "track");
+    const busy = person.busy.filter((block) => block.day === day);
+    for (const block of busy) {
+      if (!editable) {
+        track.append(bar("div", "busy", block, `Busy ${hours(block)}`));
+        continue;
+      }
+      const node = bar("button", "busy", block, `Busy ${hours(block)}. Click to remove.`);
+      node.type = "button";
+      node.setAttribute("aria-label", `${person.name}, ${dayName}, ${node.title}`);
+      node.addEventListener("click", () => {
+        person.busy = person.busy.filter((other) => other !== block);
         changed();
       });
-      name.append(remove);
+      track.append(node);
     }
-    box.append(name);
-    grid.days.forEach((dayName, day) => {
-      const track = el("div", "track");
-      const busy = person.busy.filter((block) => block.day === day);
-      for (const block of busy) {
-        if (!editable) {
-          track.append(bar("div", "busy", block, `Busy ${hours(block)}`));
-          continue;
-        }
-        const node = bar("button", "busy", block, `Busy ${hours(block)}. Click to remove.`);
-        node.type = "button";
-        node.setAttribute("aria-label", `${person.name}, ${dayName}, ${node.title}`);
-        node.addEventListener("click", () => {
-          person.busy = person.busy.filter((other) => other !== block);
-          changed();
-        });
-        track.append(node);
-      }
-      if (booking && booking.day === day && booking.attendees.includes(person.name)) {
-        const kind = booking.busy.includes(person.name) ? "clash" : "booked";
-        track.append(bar("div", kind, booking, `Booked ${hours(booking)}`));
-      }
-      if (editable) {
-        track.addEventListener("pointerdown", (event) => startDrag(event, track, person, day));
-      } else {
-        track.setAttribute("role", "img");
-        track.setAttribute("aria-label", `${person.name}, ${dayName}: ` +
-          (busy.length ? "busy " + names.format(busy.map(hours)) : "free all day"));
-      }
-      box.append(track);
-    });
+    if (booking && booking.day === day && booking.attendees.includes(person.name)) {
+      const kind = booking.busy.includes(person.name) ? "clash" : "booked";
+      track.append(bar("div", kind, booking, `Booked ${hours(booking)}`));
+    }
+    if (editable) {
+      track.addEventListener("pointerdown", (event) => startDrag(event, track, person, day));
+    } else {
+      track.setAttribute("role", "img");
+      track.setAttribute("aria-label", `${person.name}, ${dayName}: ` +
+        (busy.length ? "busy " + names.format(busy.map((block) => hours(block))) : "free all day"));
+    }
+    const lane = el("div", "lane");
+    lane.append(el("div", "name", person.name), track);
+    section.append(lane);
+  }
+  return section;
+}
+
+// Draw every day of the week, with the booking on top if there is one.
+function drawWeek(booking) {
+  const editable = mode === "custom";
+  const week = $("week");
+  week.classList.toggle("editable", editable);
+  week.replaceChildren();
+  if (people().length) {
+    grid.days.forEach((_, day) => week.append(dayBlock(day, people(), booking, editable)));
   }
   $("empty").hidden = people().length > 0;
+  $("hint").hidden = people().length === 0;
+}
+
+// The people in the hand-made calendar, each with a button to remove them.
+function drawChips() {
+  $("chips").replaceChildren(...custom.people.map((person) => {
+    const chip = el("span", "chip", person.name);
+    const remove = el("button", "", "×");
+    remove.type = "button";
+    remove.title = `Remove ${person.name}`;
+    remove.setAttribute("aria-label", remove.title);
+    remove.addEventListener("click", () => {
+      custom.people = custom.people.filter((other) => other !== person);
+      changed();
+    });
+    chip.append(remove);
+    return chip;
+  }));
 }
 
 // Dragging across an empty part of a row marks those slots as busy.
@@ -381,7 +457,7 @@ function startDrag(event, track, person, day) {
   let block;
   const stretchTo = (slot) => {
     block = { day, start: Math.min(first, slot), length: Math.abs(slot - first) + 1 };
-    draft.style.gridColumn = `${block.start + 1} / span ${block.length}`;
+    place(draft, block);
   };
   stretchTo(first);
   track.append(draft);
@@ -455,6 +531,7 @@ function refresh() {
   // Keep the address in step, so a reload comes back to the same calendars.
   const address = isCustom ? "#mine" : `#${generated.seed}`;
   if (location.hash !== address) history.replaceState(null, "", address);
+  drawChips();
   drawWeek(null);
 }
 
@@ -469,6 +546,9 @@ async function loadWeek(seed) {
     $("another").disabled = false;
   }
   grid = { days: generated.days, times: generated.times, limits: generated.limits };
+  const slots = grid.times.length - 1;
+  document.documentElement.style.setProperty("--slots", slots);
+  document.documentElement.style.setProperty("--hours", slots / 2);
   $("name").maxLength = grid.limits.name_chars;
   refresh();
 }
@@ -486,12 +566,17 @@ function showResult(data) {
 
   if (data.outcome === "booked") {
     const booking = data.booking;
+    const attendees = people().filter((person) => booking.attendees.includes(person.name));
+    // The booked day again, with only the people in the meeting.
+    const day = el("div", "scroll");
+    day.append(dayBlock(booking.day, attendees, booking, false));
     box.append(
       el("p", "headline", `Booked ${grid.days[booking.day]}, ${hours(booking)}`),
       el("p", "soft", `For ${names.format(booking.attendees)}.`),
       booking.busy.length
         ? el("p", "bad", `${names.format(booking.busy)} ${booking.busy.length > 1 ? "are" : "is"} busy at that time.`)
         : el("p", "good", "Everyone is free at that time."),
+      day,
     );
   } else if (data.outcome === "gave_up") {
     box.append(
@@ -548,6 +633,7 @@ async function run() {
     $("go").disabled = false;
     $("go").textContent = "Schedule";
   }
+  $("result").scrollIntoView({ block: "nearest", behavior: "smooth" });
 }
 
 function show(next) {
