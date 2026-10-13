@@ -36,7 +36,8 @@ giving up.
 
 Everything runs inside the project's own virtual environment, `.venv`. On
 Windows, `start.bat` creates it the first time and installs the packages listed
-in `pyproject.toml`. It needs Python 3.12 or newer.
+in `pyproject.toml`. Each time it is run, it checks that those packages are
+still there and installs any that are missing. It needs Python 3.12 or newer.
 
 ```
 start.bat
