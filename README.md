@@ -41,12 +41,11 @@ Windows, `start.bat` creates it the first time and installs the packages listed
 in `pyproject.toml`. Each time it is run, it checks that those packages are
 still there and installs any that are missing. It needs Python 3.12 or newer.
 
-```
-start.bat
-```
-
-On its own, `start.bat` runs the tests. Anything written after it is passed to
-the environment's Python, for example `start.bat -m pytest -q`.
+| Command | What it does |
+|---|---|
+| `start.bat` | Opens the web page for trying the agent (see below) |
+| `start.bat test` | Runs the tests |
+| `start.bat -m ...` | Passes anything else to the environment's Python, for example `start.bat -m pytest -q` |
 
 The tests use fake models, so they need neither the local model nor a GPU.
 GitHub Actions runs them on every push.
@@ -79,11 +78,11 @@ commercial use.
 
 ## Trying it in a browser
 
-With the local model set up, this opens a page for typing a request and
-watching the agent work on it:
+With the local model set up, running `start.bat` on its own, or double-clicking
+it, opens a page for typing a request and watching the agent work on it:
 
 ```
-web.bat
+start.bat
 ```
 
 The page shows a generated week of calendars. Type a request for the people in
@@ -98,7 +97,8 @@ are in neither the practice set nor the test set.
 The page is a single HTML file served by Python's built-in web server, so it
 adds no packages. It can be reached from this computer only, at
 `http://127.0.0.1:8000`. Press Ctrl+C in the window that started it to stop
-both the page and the model. `web.bat --port 8001` uses another port.
+both the page and the model. `start.bat -m schedagent web --port 8001` uses
+another port.
 
 ## Running the model on the practice tasks
 

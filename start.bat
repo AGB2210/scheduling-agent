@@ -3,8 +3,9 @@ rem Runs the project inside its own virtual environment (.venv).
 rem The environment is created the first time this is run. Every time, the
 rem packages named in pyproject.toml are checked, and installed if one is missing.
 rem
-rem   start.bat              run the tests
-rem   start.bat -m pytest -q anything after start.bat goes to the venv's Python
+rem   start.bat              open the web page for trying the agent
+rem   start.bat test         run the tests
+rem   start.bat -m pytest -q anything else goes to the venv's Python
 setlocal
 cd /d "%~dp0"
 
@@ -23,6 +24,9 @@ if not exist ".venv\Scripts\python.exe" (
 )
 
 if "%~1"=="" (
+    rem If the page cannot start, keep the window open so the reason can be read.
+    ".venv\Scripts\python.exe" -m schedagent web || pause
+) else if /i "%~1"=="test" (
     ".venv\Scripts\python.exe" -m pytest
 ) else (
     ".venv\Scripts\python.exe" %*
