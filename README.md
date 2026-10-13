@@ -72,6 +72,29 @@ get mixed up with any other copy on the machine.
 `qwen2.5:3b` is released under the Qwen Research License, which does not allow
 commercial use.
 
+## Trying it in a browser
+
+With the local model set up, this opens a page for typing a request and
+watching the agent work on it:
+
+```
+web.bat
+```
+
+The page shows a generated week of calendars. Type a request for the people in
+it and press Schedule. The page then shows each tool call the agent made, what
+came back, and the time it booked, drawn on the calendars. Either agent can be
+chosen.
+
+A typed request has no list of rules to grade it against, so the page checks
+one thing only: whether anyone booked is busy at that time. The weeks it shows
+are in neither the practice set nor the test set.
+
+The page is a single HTML file served by Python's built-in web server, so it
+adds no packages. It can be reached from this computer only, at
+`http://127.0.0.1:8000`. Press Ctrl+C in the window that started it to stop
+both the page and the model. `web.bat --port 8001` uses another port.
+
 ## Running the model on the practice tasks
 
 The practice set is 100 generated tasks: 80 that have a valid slot and 20 that

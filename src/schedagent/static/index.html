@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scheduling agent</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --page: #f6f6f4;
+    --card: #ffffff;
+    --ink: #1b1c1e;
+    --soft: #666b73;
+    --line: #e2e2de;
+    --track: #f0f0ed;
+    --busy: #c5c8cf;
+    --accent: #2456c9;
+    --on-accent: #ffffff;
+    --good: #1a7f4b;
+    --bad: #c0392b;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --page: #121315;
+      --card: #1a1c1f;
+      --ink: #ececea;
+      --soft: #9a9fa7;
+      --line: #2b2e33;
+      --track: #23262a;
+      --busy: #565c66;
+      --accent: #86a8ff;
+      --on-accent: #0f1626;
+      --good: #62cc93;
+      --bad: #ff8a7a;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--page);
+    color: var(--ink);
+    font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  main { max-width: 60rem; margin: 0 auto; padding: 2.5rem 1rem 4rem; }
+  h1 { margin: 0; font-size: 1.5rem; font-weight: 650; letter-spacing: -0.01em; }
+  h2 { margin: 0; font-size: 0.95rem; font-weight: 600; }
+  h3 { margin: 1.5rem 0 0.5rem; font-size: 0.8rem; font-weight: 600;
+       color: var(--soft); text-transform: uppercase; letter-spacing: 0.06em; }
+  p { margin: 0; }
+  .soft { color: var(--soft); }
+  .small { font-size: 0.85rem; }
+  header { margin-bottom: 1.5rem; }
+  header p { margin-top: 0.25rem; }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 1.25rem;
+    margin-top: 1rem;
+  }
+  .row { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
+  .spacer { flex: 1; }
+
+  button, select, textarea { font: inherit; color: inherit; }
+  button {
+    border: 1px solid var(--line);
+    background: transparent;
+    border-radius: 7px;
+    padding: 0.4rem 0.85rem;
+    cursor: pointer;
+  }
+  button:hover { border-color: var(--soft); }
+  button.primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--on-accent);
+    font-weight: 600;
+  }
+  button:disabled { opacity: 0.55; cursor: default; }
+  select {
+    border: 1px solid var(--line);
+    background: var(--card);
+    border-radius: 7px;
+    padding: 0.35rem 0.5rem;
+  }
+  textarea {
+    display: block;
+    width: 100%;
+    margin: 0.75rem 0;
+    padding: 0.7rem 0.8rem;
+    border: 1px solid var(--line);
+    border-radius: 7px;
+    background: var(--page);
+    resize: vertical;
+  }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* The week: one row for each person, one column for each day. */
+  .scroll { overflow-x: auto; margin-top: 1rem; }
+  .grid {
+    display: grid;
+    grid-template-columns: 4.5rem repeat(var(--days), minmax(7.5rem, 1fr));
+    gap: 0.4rem 0.6rem;
+    align-items: center;
+    min-width: 46rem;
+  }
+  .day { font-size: 0.85rem; font-weight: 600; }
+  .scale {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.7rem;
+    font-weight: 400;
+    color: var(--soft);
+    font-variant-numeric: tabular-nums;
+  }
+  .name { font-size: 0.9rem; }
+  .track {
+    display: grid;
+    grid-template-columns: repeat(var(--slots), 1fr);
+    height: 1.4rem;
+    border-radius: 4px;
+    overflow: hidden;
+    /* A faint line at every hour. */
+    background:
+      linear-gradient(to right, var(--line) 1px, transparent 1px)
+      0 0 / calc(100% / var(--hours)) 100% var(--track);
+  }
+  .bar { grid-row: 1; }
+  .bar.busy { background: var(--busy); }
+  .bar.booked { background: var(--accent); z-index: 1; }
+  .bar.clash { background: var(--bad); z-index: 1; }
+  .legend { margin-top: 1rem; display: flex; gap: 1.25rem; flex-wrap: wrap; }
+  .key {
+    display: inline-block;
+    width: 0.8rem;
+    height: 0.8rem;
+    border-radius: 3px;
+    margin-right: 0.35rem;
+    vertical-align: -1px;
+  }
+
+  .headline { font-size: 1.2rem; font-weight: 600; margin-top: 0.5rem; }
+  .good { color: var(--good); }
+  .bad { color: var(--bad); }
+  .steps { margin: 0; padding-left: 1.4rem; }
+  .steps li { margin-bottom: 0.7rem; }
+  code {
+    font: 0.82rem/1.5 ui-monospace, "Cascadia Mono", Consolas, monospace;
+    overflow-wrap: anywhere;
+  }
+  .tool { font-weight: 700; margin-right: 0.5rem; }
+  .out { display: block; color: var(--soft); }
+  .note { margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--line); }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Scheduling agent</h1>
+    <p class="soft">Type a meeting request in plain words. A small language model
+      running on this computer reads it and books a time.</p>
+  </header>
+
+  <section class="card" aria-labelledby="week-title">
+    <div class="row">
+      <h2 id="week-title">Calendars</h2>
+      <span class="spacer"></span>
+      <button id="another" type="button">Another week</button>
+    </div>
+    <div class="scroll"><div id="grid" class="grid"></div></div>
+    <p class="legend small soft">
+      <span><span class="key" style="background: var(--busy)"></span>Busy</span>
+      <span><span class="key" style="background: var(--accent)"></span>Booked</span>
+      <span><span class="key" style="background: var(--bad)"></span>Booked over a busy time</span>
+    </p>
+  </section>
+
+  <section class="card">
+    <h2><label for="request">Request</label></h2>
+    <textarea id="request" rows="3" maxlength="500"></textarea>
+    <div class="row">
+      <label class="small soft">Agent
+        <select id="agent">
+          <option value="solver">Solver: hands the rules to a solver</option>
+          <option value="plain">Plain: reads the calendars itself</option>
+        </select>
+      </label>
+      <span class="spacer"></span>
+      <button id="example" type="button">Use an example</button>
+      <button id="go" type="button" class="primary">Schedule</button>
+    </div>
+  </section>
+
+  <section class="card" id="result" aria-live="polite" hidden></section>
+</main>
+
+<script>
+"use strict";
+
+const $ = (id) => document.getElementById(id);
+const names = new Intl.ListFormat("en-GB", { type: "conjunction" });
+let week = null;  // the calendars on screen, as the server sent them
+
+// Make one element. All text goes in as text, never as HTML.
+function el(tag, className, text) {
+  const node = document.createElement(tag);
+  if (className) node.className = className;
+  if (text !== undefined) node.textContent = text;
+  return node;
+}
+
+// Ask the server. Sends JSON when there is a body, and always gets JSON back.
+async function api(path, body) {
+  let response;
+  try {
+    response = await fetch(path, body && {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+  } catch {
+    throw new Error("The local server did not answer. Is it still running?");
+  }
+  const data = await response.json();
+  if (!response.ok) throw new Error(data.error);
+  return data;
+}
+
+// "10:00 to 11:00" for a block of slots.
+function hours(block) {
+  return `${week.times[block.start]} to ${week.times[block.start + block.length]}`;
+}
+
+function bar(kind, block, label) {
+  const node = el("div", `bar ${kind}`);
+  node.style.gridColumn = `${block.start + 1} / span ${block.length}`;
+  node.title = `${label} ${hours(block)}`;
+  return node;
+}
+
+// Draw every person's week, with the booking on top if there is one.
+function drawWeek(booking) {
+  const slots = week.times.length - 1;
+  const grid = $("grid");
+  grid.style.setProperty("--days", week.days.length);
+  grid.style.setProperty("--slots", slots);
+  grid.style.setProperty("--hours", slots / 2);
+  grid.replaceChildren(el("div"));
+  for (const day of week.days) {
+    const head = el("div", "day", day);
+    const scale = el("div", "scale");
+    for (const slot of [0, slots / 2, slots]) scale.append(el("span", "", week.times[slot]));
+    head.append(scale);
+    grid.append(head);
+  }
+  for (const person of week.people) {
+    grid.append(el("div", "name", person.name));
+    week.days.forEach((dayName, day) => {
+      const track = el("div", "track");
+      const busy = person.busy.filter((block) => block.day === day);
+      for (const block of busy) track.append(bar("busy", block, "Busy"));
+      if (booking && booking.day === day && booking.attendees.includes(person.name)) {
+        const kind = booking.busy.includes(person.name) ? "clash" : "booked";
+        track.append(bar(kind, booking, "Booked"));
+      }
+      track.setAttribute("role", "img");
+      track.setAttribute("aria-label", `${person.name}, ${dayName}: ` +
+        (busy.length ? "busy " + names.format(busy.map(hours)) : "free all day"));
+      grid.append(track);
+    });
+  }
+}
+
+async function loadWeek(seed) {
+  $("another").disabled = true;
+  try {
+    week = await api(seed === null ? "/api/week" : `/api/week?seed=${seed}`);
+  } catch (error) {
+    if (seed !== null) return loadWeek(null);  // an address with a week that does not exist
+    return showMessage(error.message);
+  } finally {
+    $("another").disabled = false;
+  }
+  history.replaceState(null, "", `#${week.seed}`);
+  $("week-title").textContent = `Calendars, week ${week.seed}`;
+  $("request").placeholder = `For example: ${week.example}`;
+  $("result").hidden = true;
+  drawWeek(null);
+}
+
+function showMessage(text, className) {
+  const box = $("result");
+  box.hidden = false;
+  box.replaceChildren(el("p", className || "bad", text));
+}
+
+function showResult(data) {
+  const box = $("result");
+  box.hidden = false;
+  box.replaceChildren(el("h2", "", "Result"));
+
+  if (data.outcome === "booked") {
+    const booking = data.booking;
+    box.append(
+      el("p", "headline", `Booked ${week.days[booking.day]}, ${hours(booking)}`),
+      el("p", "soft", `For ${names.format(booking.attendees)}.`),
+      booking.busy.length
+        ? el("p", "bad", `${names.format(booking.busy)} ${booking.busy.length > 1 ? "are" : "is"} busy at that time.`)
+        : el("p", "good", "Everyone is free at that time."),
+    );
+  } else if (data.outcome === "gave_up") {
+    box.append(
+      el("p", "headline", "The agent gave up"),
+      el("p", "soft", data.reason ? `Its reason: ${data.reason}` : "It gave no reason."),
+    );
+  } else {
+    box.append(
+      el("p", "headline", "No answer"),
+      el("p", "soft", `The agent used all ${data.max_turns} model calls without booking or giving up.`),
+    );
+  }
+
+  box.append(el("h3", "", "What the agent did"));
+  const steps = el("ol", "steps");
+  for (const event of data.events) {
+    const item = el("li");
+    if (event.kind === "said") {
+      item.append(el("span", "soft", "The model wrote: "), el("span", "", event.text));
+    } else {
+      item.append(
+        el("code", "tool", event.tool),
+        el("code", "", JSON.stringify(event.args)),
+        el("code", "out", event.result),
+      );
+    }
+    steps.append(item);
+  }
+  box.append(
+    data.events.length ? steps : el("p", "soft", "It called no tools."),
+    el("p", "small soft", `${data.llm_calls} model ${data.llm_calls === 1 ? "call" : "calls"}, ${data.seconds} seconds.`),
+    el("p", "note small soft", "The check above compares the booking with the calendars. " +
+      "It cannot tell whether the time follows the rules in your sentence."),
+  );
+}
+
+async function run() {
+  const request = $("request").value.trim();
+  if (!request) return $("request").focus();
+  $("go").disabled = true;
+  $("go").textContent = "Working";
+  drawWeek(null);
+  showMessage("Working. The first request takes longer while the model loads.", "soft");
+  try {
+    const data = await api("/api/schedule", { seed: week.seed, request, agent: $("agent").value });
+    drawWeek(data.booking);
+    showResult(data);
+  } catch (error) {
+    showMessage(error.message);
+  } finally {
+    $("go").disabled = false;
+    $("go").textContent = "Schedule";
+  }
+}
+
+$("go").addEventListener("click", run);
+$("another").addEventListener("click", () => loadWeek(null));
+$("example").addEventListener("click", () => { $("request").value = week.example; });
+$("request").addEventListener("keydown", (event) => {
+  if (event.key === "Enter" && (event.ctrlKey || event.metaKey)) run();
+});
+
+const wanted = location.hash.slice(1);
+loadWeek(/^\d+$/.test(wanted) ? wanted : null);
+</script>
+</body>
+</html>

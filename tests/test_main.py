@@ -134,6 +134,39 @@ def test_compare_sets_two_runs_side_by_side(client, monkeypatch, tmp_path, capsy
     assert "difference   +0 points  (+0 to +0)" in text
 
 
+def test_web_serves_the_page_with_the_local_model(client, monkeypatch):
+    client.pulled = ["some-model"]
+    served = {}
+
+    def fake_serve(llm_for, port, open_browser):
+        served.update(llm_for=llm_for, port=port, open_browser=open_browser)
+
+    monkeypatch.setattr(cli, "serve", fake_serve)
+    monkeypatch.setattr(cli, "local_model", lambda client, model, tools: (model, tools))
+    cli.main(["web", "--model", "some-model", "--port", "8123", "--no-browser"])
+
+    assert served["port"] == 8123
+    assert served["open_browser"] is False
+    assert served["llm_for"](SOLVER) == ("some-model", SOLVER.tools)
+
+
+def test_web_says_how_to_get_a_model_that_is_not_downloaded(client, monkeypatch):
+    monkeypatch.setattr(cli, "serve", lambda *args: pytest.fail("should not serve"))
+    with pytest.raises(SystemExit, match="schedagent pull some-model"):
+        cli.main(["web", "--model", "some-model"])
+
+
+def test_web_says_where_to_look_when_ollama_is_not_set_up(monkeypatch):
+    @contextmanager
+    def no_ollama():
+        raise FileNotFoundError("Ollama is not unpacked at ollama/bin/ollama.exe")
+        yield
+
+    monkeypatch.setattr(cli, "running_ollama", no_ollama)
+    with pytest.raises(SystemExit, match="The local model"):
+        cli.main(["web"])
+
+
 def test_a_command_is_required():
     with pytest.raises(SystemExit):
         cli.main([])

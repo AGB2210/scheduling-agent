@@ -22,6 +22,10 @@ from schedagent.testset import (
     write_worksheet,
 )
 from schedagent.versions import VERSIONS, Version
+from schedagent.web import serve
+
+# The model the agent was built and tested with.
+DEFAULT_MODEL = "qwen2.5:3b"
 
 
 def main(argv: list[str] | None = None) -> None:
@@ -64,6 +68,13 @@ def main(argv: list[str] | None = None) -> None:
     )
     commands.add_parser("check", help="look for problems in the written test requests")
 
+    web = commands.add_parser("web", help="open a web page for trying the agent")
+    web.add_argument("--model", default=DEFAULT_MODEL)
+    web.add_argument("--port", type=int, default=8000)
+    web.add_argument(
+        "--no-browser", action="store_true", help="do not open the page by itself"
+    )
+
     args = parser.parse_args(argv)
     if args.command == "pull":
         _pull(args.model)
@@ -92,6 +103,8 @@ def main(argv: list[str] | None = None) -> None:
     elif args.command == "worksheet":
         write_worksheet(WORKSHEET, held_out_seeds())
         print(f"Created {WORKSHEET}. Write a request under each task.")
+    elif args.command == "web":
+        _web(args.model, args.port, open_browser=not args.no_browser)
     else:
         problems = check_worksheet(WORKSHEET, held_out_seeds())
         print("\n".join(problems) if problems else "No problems found.")
@@ -128,6 +141,25 @@ def _run(
         llm = local_model(client, model, tools=version.tools)
         ran = run_set(tasks, llm, settings, out, on_task=show, version=version)
     print(f"Ran {ran} tasks. Saved in {out}")
+
+
+def _web(model: str, port: int, open_browser: bool) -> None:
+    try:
+        with running_ollama() as client:
+            if model not in {entry.model for entry in client.list().models}:
+                raise SystemExit(
+                    f"{model} is not downloaded yet. Run:\n"
+                    f"  start.bat -m schedagent pull {model}"
+                )
+            serve(
+                lambda version: local_model(client, model, tools=version.tools),
+                port,
+                open_browser,
+            )
+    except FileNotFoundError as error:
+        raise SystemExit(
+            f"{error}.\nSee 'The local model' in README.md for how to set it up."
+        ) from None
 
 
 if __name__ == "__main__":
