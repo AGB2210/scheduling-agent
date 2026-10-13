@@ -1,5 +1,7 @@
 # Scheduling agent
 
+[![tests](https://github.com/AGB2210/scheduling-agent/actions/workflows/tests.yml/badge.svg)](https://github.com/AGB2210/scheduling-agent/actions/workflows/tests.yml)
+
 A small agent that books meetings from plain-language requests, running fully
 on a local model.
 
@@ -45,6 +47,9 @@ start.bat
 
 On its own, `start.bat` runs the tests. Anything written after it is passed to
 the environment's Python, for example `start.bat -m pytest -q`.
+
+The tests use fake models, so they need neither the local model nor a GPU.
+GitHub Actions runs them on every push.
 
 To rebuild the environment, delete the `.venv` folder and run `start.bat`
 again.
